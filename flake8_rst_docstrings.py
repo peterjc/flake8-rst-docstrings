@@ -33,6 +33,35 @@ __version__ = "0.0.1"
 
 log = logging.getLogger(__name__)
 
+rst_prefix = "RST"
+rst_default = 999
+rst_validation_codes = {
+    "Unexpected section title.": 1,
+    "Title underline too short.": 2,
+    "Possible title underline, too short for the title. Treating it as ordinary text because it's so short.": 3,
+    "Unexpected possible title overline or transition. Treating it as ordinary text because it's so short.": 4,
+    "Inline strong start-string without end-string.": 5,
+    "Unexpected indentation.": 201,
+    "Literal block ends without a blank line; unexpected unindent.": 202,
+    "Definition list ends without a blank line; unexpected unindent.": 203,
+    "Bullet list ends without a blank line; unexpected unindent.": 204,
+    "Block quote ends without a blank line; unexpected unindent.": 205,
+    "Option list ends without a blank line; unexpected unindent.": 206,
+    "Field list ends without a blank line; unexpected unindent.": 207,
+    "Enumerated list ends without a blank line; unexpected unindent.": 208,
+    "Explicit markup ends without a blank line; unexpected unindent.": 209,
+    "Blank line required after table.": 301,
+    "Malformed table. No bottom table border found.": 302,
+    "Malformed table. No bottom table border found or no blank line after table bottom.": 303,
+    "Bottom/header table border does not match top border.": 304,
+}
+# TODO: Dynamic entries like 'Unknown directive type "%s".' via prefix or regex?
+# TODO: Tap into the docutils severity level, e.g.
+#       msg = self.reporter.severe('Duplicate ID: "%s".' % id)
+#       msg = self.reporter.system_message(...)
+#       msg = self.reporter.info(...)
+#       msg = self.reporter.error(...)
+
 
 def rst_lint(docstring_content):
     """Lint reStructuredText and return errors
@@ -676,10 +705,16 @@ class reStructuredTextChecker(object):
         module = parse(StringIO(self.source), self.filename)
         for definition in module:
             if definition.docstring:
+                # Our rst_lint function returns plain strings.
                 for rst_error in rst_lint(definition.docstring):
+                    # Map the string to a unique code
+                    # TODO: Check for new line in rst_error?
+                    msg = "%s%03i %s" % (rst_prefix,
+                                         rst_validation_codes.get(rst_error, rst_default),
+                                         rst_error)
                     # This will return the line number of the docstring
                     # using definition.start, and column as zero.
-                    yield definition.start, 0, "RST101 " + rst_error, type(self)
+                    yield definition.start, 0, msg, type(self)
 
     def load_source(self):
         """Load the source for the specified file."""

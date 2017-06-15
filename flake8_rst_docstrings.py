@@ -676,8 +676,12 @@ class reStructuredTextChecker(object):
                 # which calls docutils internally.
                 # TODO: Should we path the Python filename as filepath?
                 for rst_error in rst_lint.lint(definition.docstring):
+                    # TODO - make this a configuration option?
+                    if rst_error.level <=1 :
+                        continue
                     # Levels:
                     #
+                    # 0 - debug   --> we don't receive these
                     # 1 - info    --> RST1## codes
                     # 2 - warning --> RST2## codes
                     # 3 - error   --> RST3## codes

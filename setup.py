@@ -34,7 +34,6 @@ setup(
     py_modules=["flake8_rst_docstrings"],
     install_requires=[
         "restructuredtext_lint",
-        "six",
     ],
     entry_points={
         'flake8.extension': [

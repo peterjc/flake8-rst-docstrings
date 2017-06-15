@@ -32,6 +32,8 @@ __version__ = "0.0.1"
 log = logging.getLogger(__name__)
 
 rst_prefix = "RST"
+rst_fail_all = 997
+rst_fail_parse = 998
 rst_default = 999
 rst_validation_codes = {
     "Unexpected section title.": 1,
@@ -317,7 +319,8 @@ class Parser(object):
         try:
             compile(src, filename, 'exec')
         except SyntaxError as error:
-            six.raise_from(ParseError(), error)
+            raise ParseError()
+            #six.raise_from(ParseError(), error)
         self.stream = TokenStream(StringIO(src))
         self.filename = filename
         self.all = None
@@ -640,7 +643,18 @@ class reStructuredTextChecker(object):
 
     def run(self):
         """Use docutils to check docstrings are valid RST."""
-        module = parse(StringIO(self.source), self.filename)
+        try:
+            module = parse(StringIO(self.source), self.filename)
+        except ParseError as err:
+            msg = "%s%03i %s" % (rst_prefix,
+                                 rst_fail_parse,
+                                 "docstring parsing failed: %s" % err)
+            yield 0, 0, msg, type(self)
+        except AllError as err:
+            msg = "%s%03i %s" % (rst_prefix,
+                                 rst_fail_all,
+                                 "docstring parsing failed on __all__ entry")
+            yield 0, 0, msg, type(self)
         for definition in module:
             if definition.docstring:
                 # Off load RST validation to reStructuredText-lint

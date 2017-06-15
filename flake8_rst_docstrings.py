@@ -4,10 +4,6 @@ This is a plugin for the tool flake8 tool for checking Python
 soucre code.
 """
 
-from docutils import utils
-from docutils.core import Publisher
-from docutils.nodes import Element
-
 import logging
 import six
 import textwrap
@@ -26,6 +22,8 @@ try:
     tokenize_open = tk.open
 except AttributeError:
     tokenize_open = open
+
+import restructuredtext_lint as rst_lint
 
 
 __version__ = "0.0.1"
@@ -62,66 +60,6 @@ rst_validation_codes = {
 #       msg = self.reporter.info(...)
 #       msg = self.reporter.error(...)
 
-
-def rst_lint(docstring_content):
-    """Lint reStructuredText and return errors
-
-    :param string content: reStructuredText to be linted
-    :rtype list: List of errors. Each error will contain a line, message
-        (error message), and full message (error message + source lines)
-
-    Based on public domain code by Todd Wolfson in his tool restructuredtext-lint
-    https://github.com/twolfson/restructuredtext-lint/blob/master/restructuredtext_lint/lint.py
-    """
-    # Generate a new parser (copying `rst2html.py` flow)
-    pub = Publisher(None, None, None, settings=None)
-    pub.set_components('standalone', 'restructuredtext', 'pseudoxml')
-
-    # Configure publisher
-    # DEV: We cannot use `process_command_line` since it processes `sys.argv`
-    settings = pub.get_settings(halt_level=5)
-    pub.set_io()
-
-    # Prepare a document to parse on
-    # DEV: We avoid the `read` method because when `source` is `None`,
-    #      it attempts to read from `stdin`.
-    #      However, we already know our content.
-    # DEV: We create our document without `parse` because we need to
-    #      attach observer's before parsing
-    reader = pub.reader
-    document = utils.new_document(None, settings)
-
-    # Disable stdout
-    document.reporter.stream = None
-
-    # Collect errors via an observer
-    errors = []
-
-    def error_collector(data):
-        errors.append(Element.astext(data.children[0]).replace("\n", " "))
-
-    document.reporter.attach_observer(error_collector)
-
-    # Parse the content (and collect errors)
-    reader.parser.parse(docstring_content, document)
-    # Apply transforms (and more collect errors)
-    # DEV: We cannot use `apply_transforms` since it has
-    # `attach_observer` baked in. We want only our listener.
-    document.transformer.populate_from_components(
-        (pub.source, pub.reader, pub.reader.parser, pub.writer, pub.destination)
-    )
-    transformer = document.transformer
-    while transformer.transforms:
-        if not transformer.sorted:
-            # Unsorted initially, and whenever a transform is added.
-            transformer.transforms.sort()
-            transformer.transforms.reverse()
-            transformer.sorted = 1
-        priority, transform_class, pending, kwargs = transformer.transforms.pop()
-        transform = transform_class(transformer.document, startnode=pending)
-        transform.apply(**kwargs)
-        transformer.applied.append((priority, transform_class, pending, kwargs))
-    return errors
 
 
 ##################################################
@@ -705,16 +643,27 @@ class reStructuredTextChecker(object):
         module = parse(StringIO(self.source), self.filename)
         for definition in module:
             if definition.docstring:
-                # Our rst_lint function returns plain strings.
-                for rst_error in rst_lint(definition.docstring):
+                # Off load RST validation to reStructuredText-lint
+                # which calls docutils internally.
+                # TODO: Should we path the Python filename as filepath?
+                for rst_error in rst_lint.lint(definition.docstring):
+                    if rst_error.level < 2:
+                        # 1 - info
+                        # 2 - warning
+                        # 3 - error
+                        # 4 - severe
+                        continue
+
                     # Map the string to a unique code
-                    # TODO: Check for new line in rst_error?
+                    # TODO: Check for new line in rst_error.message?
                     msg = "%s%03i %s" % (rst_prefix,
-                                         rst_validation_codes.get(rst_error, rst_default),
-                                         rst_error)
-                    # This will return the line number of the docstring
-                    # using definition.start, and column as zero.
-                    yield definition.start, 0, msg, type(self)
+                                         rst_validation_codes.get(rst_error.message, rst_default),
+                                         rst_error.message)
+                    # This will return the line number by combining the
+                    # start of the docstring with the offet within it.
+                    # We don't know the column number, leaving as zero.
+                    # TODO: Check for off-by-one in line number
+                    yield definition.start + rst_error.line, 0, msg, type(self)
 
     def load_source(self):
         """Load the source for the specified file."""

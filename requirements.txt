@@ -1,0 +1,4 @@
+# We use restructuredtext-lint via its Python API,
+# https://github.com/twolfson/restructuredtext-lint
+# This internally calls docutils for RST validation:
+restructuredtext_lint

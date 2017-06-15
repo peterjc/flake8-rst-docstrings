@@ -13,8 +13,8 @@ has a flake8 plugin called ``flake8-docstrings``, see:
 - https://github.com/PyCQA/pydocstyle
 - https://github.com/PyCQA/flake8-docstrings
 
-The reStructuredText (RST) validation is done by calling ``docutils`` based
-on public domain code from Todd Wolfson's ``restructuredtext-lint`` code:
+The reStructuredText (RST) validation is done by calling ``docutils`` via
+Todd Wolfson's ``restructuredtext-lint`` code:
 
 - http://docutils.sourceforge.net/
 - https://github.com/twolfson/restructuredtext-lint

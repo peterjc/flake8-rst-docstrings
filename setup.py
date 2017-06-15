@@ -33,7 +33,7 @@ setup(
     keywords="PEP 287, pep287, docstrings, rst, reStructuredText",
     py_modules=["flake8_rst_docstrings"],
     install_requires=[
-        "docutils",
+        "restructuredtext_lint",
         "six",
     ],
     entry_points={

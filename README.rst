@@ -45,4 +45,17 @@ Internally we use ``docutils`` for RST validation, which has this to say in
   level-4 system messages are turned into exceptions which halt processing.
   If ignored, the output will contain severe errors.
 
-*TODO*: Decide how to map these to our validation codes.
+The ``docutils`` "DEBUG" level messages are not reported. Apart from that,
+within each category, the individual messages are mapped to ``flake8`` codes
+using one hundred times the level. i.e. Validation codes ``RST4##`` are
+severe or critical errors in RST validation, ``RST3##`` are major errors,
+``RST2##`` are warnings, while ``RST1##`` are information only.
+
+Codes ending ``99``, for example ``RST499``, indicate a previously unseen
+validation error for which we have yet to assign a unique validation code
+in the assocated range, which would be``RST4##`` in this example.
+
+Codes starting ``RST9##`` indicate there was a problem parsing the Python
+file in order to extract the docstrings.
+
+TODO: Silence the ``RST1##`` information level codes by default?

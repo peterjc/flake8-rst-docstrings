@@ -32,36 +32,51 @@ __version__ = "0.0.1"
 log = logging.getLogger(__name__)
 
 rst_prefix = "RST"
-rst_fail_all = 997
-rst_fail_parse = 998
-rst_default = 999
-rst_validation_codes = {
-    "Unexpected section title.": 1,
-    "Title underline too short.": 2,
-    "Possible title underline, too short for the title. Treating it as ordinary text because it's so short.": 3,
-    "Unexpected possible title overline or transition. Treating it as ordinary text because it's so short.": 4,
-    "Inline strong start-string without end-string.": 5,
-    "Unexpected indentation.": 201,
-    "Literal block ends without a blank line; unexpected unindent.": 202,
-    "Definition list ends without a blank line; unexpected unindent.": 203,
-    "Bullet list ends without a blank line; unexpected unindent.": 204,
-    "Block quote ends without a blank line; unexpected unindent.": 205,
-    "Option list ends without a blank line; unexpected unindent.": 206,
-    "Field list ends without a blank line; unexpected unindent.": 207,
-    "Enumerated list ends without a blank line; unexpected unindent.": 208,
-    "Explicit markup ends without a blank line; unexpected unindent.": 209,
-    "Blank line required after table.": 301,
-    "Malformed table. No bottom table border found.": 302,
-    "Malformed table. No bottom table border found or no blank line after table bottom.": 303,
-    "Bottom/header table border does not match top border.": 304,
-}
-# TODO: Dynamic entries like 'Unknown directive type "%s".' via prefix or regex?
-# TODO: Tap into the docutils severity level, e.g.
-#       msg = self.reporter.severe('Duplicate ID: "%s".' % id)
-#       msg = self.reporter.system_message(...)
-#       msg = self.reporter.info(...)
-#       msg = self.reporter.error(...)
+rst_fail_parse = 901
+rst_fail_all = 902
 
+# Level 1 - info
+code_mapping_info = {
+    "Possible title underline, too short for the title.": 1,
+    "Unexpected possible title overline or transition.": 2,
+}
+
+# Level 2 - warning
+code_mapping_warning = {
+    # XXX ends without a blank line; unexpected unindent:
+    "Block quote ends without a blank line; unexpected unindent.": 1,
+    "Bullet list ends without a blank line; unexpected unindent.": 2,
+    "Definition list ends without a blank line; unexpected unindent.": 3,
+    "Enumerated list ends without a blank line; unexpected unindent.": 4,
+    "Explicit markup ends without a blank line; unexpected unindent.": 5,
+    "Field list ends without a blank line; unexpected unindent.": 6,
+    "Literal block ends without a blank line; unexpected unindent.": 7,
+    "Option list ends without a blank line; unexpected unindent.": 8,
+    # Other:
+    "Inline strong start-string without end-string.": 10,
+    "Blank line required after table.": 11,
+}
+
+# Level 3 - error
+code_mapping_error = {
+    "Unexpected indentation.": 1,
+    "Malformed table.": 2,
+}
+
+# Level 4 - severe
+code_mapping_severe = {
+    "Unexpected section title.": 1,
+}
+
+code_mappings_by_level = {
+    1: code_mapping_info,
+    2: code_mapping_warning,
+    3: code_mapping_error,
+    4: code_mapping_severe,
+}
+
+assert code_mappings_by_level[1]["Possible title underline, too short for the title."] == 1
+# TODO: Dynamic entries like 'Unknown directive type "%s".' via prefix or regex?
 
 
 ##################################################
@@ -661,18 +676,20 @@ class reStructuredTextChecker(object):
                 # which calls docutils internally.
                 # TODO: Should we path the Python filename as filepath?
                 for rst_error in rst_lint.lint(definition.docstring):
-                    if rst_error.level < 2:
-                        # 1 - info
-                        # 2 - warning
-                        # 3 - error
-                        # 4 - severe
-                        continue
+                    # Levels:
+                    #
+                    # 1 - info    --> RST1## codes
+                    # 2 - warning --> RST2## codes
+                    # 3 - error   --> RST3## codes
+                    # 4 - severe  --> RST4## codes
+                    #
+                    # Map the string to a unique code:
+                    msg = rst_error.message.split("\n", 1)[0]
+                    code = code_mappings_by_level[rst_error.level].get(msg, 99)
+                    assert code < 100, code
+                    code += 100 * rst_error.level
+                    msg = "%s%03i %s" % (rst_prefix, code, msg)
 
-                    # Map the string to a unique code
-                    # TODO: Check for new line in rst_error.message?
-                    msg = "%s%03i %s" % (rst_prefix,
-                                         rst_validation_codes.get(rst_error.message, rst_default),
-                                         rst_error.message)
                     # This will return the line number by combining the
                     # start of the docstring with the offet within it.
                     # We don't know the column number, leaving as zero.

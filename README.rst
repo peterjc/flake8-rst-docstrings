@@ -19,8 +19,8 @@ Todd Wolfson's ``restructuredtext-lint`` code:
 - http://docutils.sourceforge.net/
 - https://github.com/twolfson/restructuredtext-lint
 
-Validation codes
-----------------
+Flake8 Validation codes
+-----------------------
 
 Early versions of flake8 assumed a single character prefix for the validation
 codes, which became problematic with collisions in the plugin ecosystem. Since
@@ -59,6 +59,36 @@ in the assocated range, which would be``RST4##`` in this example.
 
 Codes starting ``RST9##`` indicate there was a problem parsing the Python
 file in order to extract the docstrings.
+
+
+Installation and usage
+----------------------
+
+We recommend installing this plugin and ``flake8`` itself using pip:
+
+```
+$ pip install flake8 flake8-rst-docstrings
+```
+
+The new validator should be automatically included when using ``flake8`` which
+may now report additional validation codes starting with ``RST`` (as defined
+above). For example:
+
+```
+$ flake8 example.py
+```
+
+You can request only the ``RST`` codes be shown using:
+
+```
+$ flake8 --select RST example.py
+```
+
+Similarly you might add particular RST validation codes to your flake8
+configuration file's select or ignore list.
+
+Note in addition to the ``RST`` prefix alone you can use partial codes
+like ``RST2`` meaning ``RST200``, ``RST201``, ... and so on.
 
 
 Version History

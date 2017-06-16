@@ -45,11 +45,13 @@ Internally we use ``docutils`` for RST validation, which has this to say in
   level-4 system messages are turned into exceptions which halt processing.
   If ignored, the output will contain severe errors.
 
-The ``docutils`` "DEBUG" level messages are not reported. Apart from that,
-within each category, the individual messages are mapped to ``flake8`` codes
+The ``docutils`` "DEBUG" level messages are not reported, and the plugin
+currently ignores the "INFO" level messages.
+
+Within each category, the individual messages are mapped to ``flake8`` codes
 using one hundred times the level. i.e. Validation codes ``RST4##`` are
 severe or critical errors in RST validation, ``RST3##`` are major errors,
-``RST2##`` are warnings, while ``RST1##`` are information only.
+``RST2##`` are warnings, while if shown ``RST1##`` are information only.
 
 Codes ending ``99``, for example ``RST499``, indicate a previously unseen
 validation error for which we have yet to assign a unique validation code
@@ -58,4 +60,26 @@ in the assocated range, which would be``RST4##`` in this example.
 Codes starting ``RST9##`` indicate there was a problem parsing the Python
 file in order to extract the docstrings.
 
-TODO: Silence the ``RST1##`` information level codes by default?
+
+Version History
+---------------
+
+======= ========== ===========================================================
+Version Released   Changes
+------- ---------- -----------------------------------------------------------
+v0.0.1  2017-06-16 - Intial public release
+======= ========== ===========================================================
+
+
+Developers
+----------
+
+This plugin is on GitHub at https://github.com/peterjc/flake8-rst-docstrings
+
+
+TODO
+----
+
+- Have the "INFO" level ``RST1##`` codes available but ignored by default?
+- Can we call ``docutils`` rather than bundle a copy of their parser code?
+- Create a test suite and use this for continuous integration.

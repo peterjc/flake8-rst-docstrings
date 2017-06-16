@@ -28,7 +28,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 
 log = logging.getLogger(__name__)

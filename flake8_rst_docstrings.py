@@ -6,7 +6,9 @@ soucre code.
 
 import logging
 import six
+import sys
 import textwrap
+
 import tokenize as tk
 from itertools import chain, dropwhile
 from re import compile as re
@@ -78,6 +80,47 @@ code_mappings_by_level = {
 assert code_mappings_by_level[1]["Possible title underline, too short for the title."] == 1
 # TODO: Dynamic entries like 'Unknown directive type "%s".' via prefix or regex?
 
+####################################
+# Start of code copied from PEP257 #
+####################################
+
+# This is the reference implementation of the alogrithm
+# in PEP257 for removing the indentation of a docstring,
+# which has been placed in the public domain.
+#
+# This includes the minor change from sys.maxint to
+# sys.maxsize for Python 3 compatibility.
+#
+# https://www.python.org/dev/peps/pep-0257/#handling-docstring-indentation
+
+def trim(docstring):
+    if not docstring:
+        return ''
+    # Convert tabs to spaces (following the normal Python rules)
+    # and split into a list of lines:
+    lines = docstring.expandtabs().splitlines()
+    # Determine minimum indentation (first line doesn't count):
+    indent = sys.maxsize
+    for line in lines[1:]:
+        stripped = line.lstrip()
+        if stripped:
+            indent = min(indent, len(line) - len(stripped))
+    # Remove indentation (first line is special):
+    trimmed = [lines[0].strip()]
+    if indent < sys.maxsize:
+        for line in lines[1:]:
+            trimmed.append(line[indent:].rstrip())
+    # Strip off trailing and leading blank lines:
+    while trimmed and not trimmed[-1]:
+        trimmed.pop()
+    while trimmed and not trimmed[0]:
+        trimmed.pop(0)
+    # Return a single string:
+    return '\n'.join(trimmed)
+
+##################################
+# End of code copied from PEP257 #
+##################################
 
 ##################################################
 # Start of code copied from pydocstyle/parser.py #
@@ -675,7 +718,11 @@ class reStructuredTextChecker(object):
                 # Off load RST validation to reStructuredText-lint
                 # which calls docutils internally.
                 # TODO: Should we path the Python filename as filepath?
-                for rst_error in rst_lint.lint(definition.docstring):
+                #
+                # Note we use the PEP257 trim algorithm to remove the
+                # leading whitespace from each line - this avoids false
+                # positive severe error "Unexpected section title."
+                for rst_error in rst_lint.lint(trim(definition.docstring)):
                     # TODO - make this a configuration option?
                     if rst_error.level <=1 :
                         continue

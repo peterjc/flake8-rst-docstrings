@@ -1,6 +1,16 @@
 flake8-rst-docstrings
 =====================
 
+.. image:: https://travis-ci.org/peterjc/flake8-rst-docstrings
+   :alt: Released on the Python Package Index (PyPI)
+   :target: https://pypi.python.org/pypi/flake8-rst-docstrings
+.. image:: https://img.shields.io/travis/peterjc/flake8-rst-docstrings/master.svg
+   :alt: Testing with TravisCI
+   :target: https://travis-ci.org/peterjc/flake8-rst-docstrings/branches
+.. image:: https://landscape.io/github/peterjc/flake8-rst-docstrings/master/landscape.svg?style=flat
+   :alt: Landscape Code Metrics
+   :target: https://landscape.io/github/peterjc/flake8-rst-docstrings/
+
 Introduction
 ------------
 
@@ -63,6 +73,8 @@ file in order to extract the docstrings.
 
 Installation and usage
 ----------------------
+
+Python 3.6 or later is recommended, but Python 2.7 is also supported.
 
 We recommend installing this plugin and ``flake8`` itself using pip::
 

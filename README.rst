@@ -64,25 +64,19 @@ file in order to extract the docstrings.
 Installation and usage
 ----------------------
 
-We recommend installing this plugin and ``flake8`` itself using pip:
+We recommend installing this plugin and ``flake8`` itself using pip::
 
-```
-$ pip install flake8 flake8-rst-docstrings
-```
+    $ pip install flake8 flake8-rst-docstrings
 
 The new validator should be automatically included when using ``flake8`` which
 may now report additional validation codes starting with ``RST`` (as defined
-above). For example:
+above). For example::
 
-```
-$ flake8 example.py
-```
+    $ flake8 example.py
 
-You can request only the ``RST`` codes be shown using:
+You can request only the ``RST`` codes be shown using::
 
-```
-$ flake8 --select RST example.py
-```
+    $ flake8 --select RST example.py
 
 Similarly you might add particular RST validation codes to your flake8
 configuration file's select or ignore list.
@@ -100,6 +94,9 @@ Version Released   Changes
 v0.0.1  2017-06-16 - Initial public release.
 v0.0.2  2017-06-16 - Explicitly depend on flake8 v3.0.0 or later.
                    - Improved documentation.
+v0.0.3  2017-06-16 - Ensure plugin code and RST files themselves validate.
+                   - Removed unused import of ``six`` module.
+                   - Basic continuous integration checks with TravisCI.
 ======= ========== ===========================================================
 
 

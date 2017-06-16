@@ -5,7 +5,6 @@ soucre code.
 """
 
 import logging
-import six
 import sys
 import textwrap
 
@@ -17,6 +16,7 @@ try:
     from StringIO import StringIO
 except ImportError:  # Python 3.0 and later
     from io import StringIO
+    from io import TextIOWrapper
 
 # If possible (python >= 3.2) use tokenize.open to open files, so PEP 263
 # encoding markers are interpreted.
@@ -28,7 +28,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 
 log = logging.getLogger(__name__)
@@ -77,8 +77,7 @@ code_mappings_by_level = {
     4: code_mapping_severe,
 }
 
-assert code_mappings_by_level[1]["Possible title underline, too short for the title."] == 1
-# TODO: Dynamic entries like 'Unknown directive type "%s".' via prefix or regex?
+# TODO: Dynamic entries like 'Unknown directive type "%s".'
 
 ####################################
 # Start of code copied from PEP257 #
@@ -93,7 +92,9 @@ assert code_mappings_by_level[1]["Possible title underline, too short for the ti
 #
 # https://www.python.org/dev/peps/pep-0257/#handling-docstring-indentation
 
+
 def trim(docstring):
+    """PEP257 docstring indentation trim function."""
     if not docstring:
         return ''
     # Convert tabs to spaces (following the normal Python rules)
@@ -126,12 +127,17 @@ def trim(docstring):
 # Start of code copied from pydocstyle/parser.py #
 ##################################################
 
+
 class ParseError(Exception):
+    """Parser error."""
+
     def __str__(self):
+        """Exception as a string."""
         return "Cannot parse file."
 
 
 def humanize(string):
+    """Make a string human readable."""
     return re(r'(.)([A-Z]+)').sub(r'\1 \2', string).lower()
 
 
@@ -139,6 +145,7 @@ class Value(object):
     """A generic object with a list of preset fields."""
 
     def __init__(self, *args):
+        """Initialize."""
         if len(self._fields) != len(args):
             raise ValueError('got {} arguments for {} fields for {}: {}'
                              .format(len(args), len(self._fields),
@@ -146,12 +153,15 @@ class Value(object):
         vars(self).update(zip(self._fields, args))
 
     def __hash__(self):
+        """Hash."""
         return hash(repr(self))
 
     def __eq__(self, other):
+        """Equality."""
         return other and vars(self) == vars(other)
 
     def __repr__(self):
+        """Representation."""
         kwargs = ', '.join('{}={!r}'.format(field, getattr(self, field))
                            for field in self._fields)
         return '{}({})'.format(self.__class__.__name__, kwargs)
@@ -171,6 +181,7 @@ class Definition(Value):
     is_class = False
 
     def __iter__(self):
+        """Iterate."""
         return chain([self], *self.children)
 
     @property
@@ -189,6 +200,7 @@ class Definition(Value):
         return ''.join(reversed(list(filtered_src)))
 
     def __str__(self):
+        """Definition as a string."""
         out = 'in {} {} `{}`'.format(self._publicity, self._human, self.name)
         if self.skipped_error_codes:
             out += ' (skipping {})'.format(self.skipped_error_codes)
@@ -207,9 +219,11 @@ class Module(Definition):
 
     @property
     def is_public(self):
+        """Is the module public."""
         return not self.name.startswith('_') or self.name.startswith('__')
 
     def __str__(self):
+        """Definition as a string."""
         return 'at module level'
 
 
@@ -234,6 +248,7 @@ class Function(Definition):
     @property
     def is_test(self):
         """Return True if this function is a test function/method.
+
         We exclude tests from the imperative mood check, because to phrase
         their docstring in the imperative mood, they would have to start with
         a highly redundant "Test that ...".
@@ -315,6 +330,8 @@ class AllError(Exception):
 
 
 class TokenStream(object):
+    """Token stream."""
+
     # A logical newline is where a new expression or statement begins. When
     # there is a physical new line, but not a logical one, for example:
     # (x +
@@ -323,6 +340,7 @@ class TokenStream(object):
     LOGICAL_NEWLINES = {tk.NEWLINE, tk.INDENT, tk.DEDENT}
 
     def __init__(self, filelike):
+        """Initialize."""
         self._generator = tk.generate_tokens(filelike.readline)
         self.current = Token(*next(self._generator, None))
         self.line = self.current.start[0]
@@ -330,6 +348,7 @@ class TokenStream(object):
         self.got_logical_newline = True
 
     def move(self):
+        """Move."""
         previous = self.current
         current = self._next_from_generator()
         self.current = None if current is None else Token(*current)
@@ -345,6 +364,7 @@ class TokenStream(object):
             return None
 
     def __iter__(self):
+        """Iterate."""
         while True:
             if self.current is not None:
                 yield self.current
@@ -354,14 +374,20 @@ class TokenStream(object):
 
 
 class TokenKind(int):
+    """Kind of token."""
+
     def __repr__(self):
+        """Representation."""
         return "tk.{}".format(tk.tok_name[self])
 
 
 class Token(Value):
+    """Token."""
+
     _fields = 'kind value start end source'.split()
 
     def __init__(self, *args):
+        """Initialize."""
         super(Token, self).__init__(*args)
         self.kind = TokenKind(self.kind)
 
@@ -378,7 +404,7 @@ class Parser(object):
             compile(src, filename, 'exec')
         except SyntaxError as error:
             raise ParseError()
-            #six.raise_from(ParseError(), error)
+            # six.raise_from(ParseError(), error)
         self.stream = TokenStream(StringIO(src))
         self.filename = filename
         self.all = None
@@ -401,6 +427,7 @@ class Parser(object):
 
     def leapfrog(self, kind, value=None):
         """Skip tokens in the stream until a certain token kind is reached.
+
         If `value` is specified, tokens whose values are different will also
         be skipped.
         """
@@ -425,8 +452,9 @@ class Parser(object):
             return docstring
         return None
 
-    def parse_decorators(self):
+    def parse_decorators(self):  # noqa : D401
         """Called after first @ is found.
+
         Parse decorators into self._accumulated_decorators.
         Continue to do so until encountering the 'def' or 'class' start token.
         """
@@ -624,6 +652,7 @@ class Parser(object):
 
     def parse_from_import_statement(self):
         """Parse a 'from x import y' statement.
+
         The purpose is to find __future__ statements.
         """
         self.log.debug('parsing from/import statement.')
@@ -632,6 +661,7 @@ class Parser(object):
 
     def _parse_from_import_source(self):
         """Parse the 'from x import' part in a 'from x import y' statement.
+
         Return true iff `x` is __future__.
         """
         assert self.current.value == 'from', self.current.value
@@ -688,6 +718,7 @@ parse = Parser()
 
 class reStructuredTextChecker(object):
     """Checker of Python docstrings as reStructuredText."""
+
     name = "rst-docstrings"
     version = __version__
 
@@ -724,7 +755,7 @@ class reStructuredTextChecker(object):
                 # positive severe error "Unexpected section title."
                 for rst_error in rst_lint.lint(trim(definition.docstring)):
                     # TODO - make this a configuration option?
-                    if rst_error.level <=1 :
+                    if rst_error.level <= 1:
                         continue
                     # Levels:
                     #
@@ -751,7 +782,11 @@ class reStructuredTextChecker(object):
         """Load the source for the specified file."""
         if self.filename in self.STDIN_NAMES:
             self.filename = 'stdin'
-            self.source = pycodestyle.stdin_get_value()
+            if sys.version_info[0] < 3:
+                self.source = sys.stdin.read()
+            else:
+                self.source = TextIOWrapper(sys.stdin.buffer,
+                                            errors='ignore').read()
         else:
             with tokenize_open(self.filename) as fd:
                 self.source = fd.read()

@@ -1,7 +1,7 @@
 flake8-rst-docstrings
 =====================
 
-.. image:: https://travis-ci.org/peterjc/flake8-rst-docstrings
+.. image:: https://img.shields.io/pypi/v/flake8-rst-docstrings.svg
    :alt: Released on the Python Package Index (PyPI)
    :target: https://pypi.python.org/pypi/flake8-rst-docstrings
 .. image:: https://img.shields.io/travis/peterjc/flake8-rst-docstrings/master.svg

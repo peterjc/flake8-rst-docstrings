@@ -402,7 +402,7 @@ class Parser(object):
         src = ''.join(self.source)
         try:
             compile(src, filename, 'exec')
-        except SyntaxError as error:
+        except SyntaxError:
             raise ParseError()
             # six.raise_from(ParseError(), error)
         self.stream = TokenStream(StringIO(src))

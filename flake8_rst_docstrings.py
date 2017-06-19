@@ -740,11 +740,13 @@ class reStructuredTextChecker(object):
                                  rst_fail_parse,
                                  "Failed to parse file: %s" % err)
             yield 0, 0, msg, type(self)
+            module = []
         except AllError as err:
             msg = "%s%03i %s" % (rst_prefix,
                                  rst_fail_all,
                                  "Failed to parse __all__ entry.")
             yield 0, 0, msg, type(self)
+            module = []
         for definition in module:
             if not definition.docstring:
                 # People can use flake8-docstrings to report missing

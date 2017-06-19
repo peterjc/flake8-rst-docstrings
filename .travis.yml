@@ -28,6 +28,8 @@ install:
 script:
  - echo "Checking our own docstrings are valid RST"
  - flake8 --select RST flake8_rst_docstrings.py
+ - echo "Checking we can parse our valid test cases"
+ - flake8 --select RST tests/test_cases/*.py
 
 notifications:
   email: false

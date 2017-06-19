@@ -28,7 +28,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 
 log = logging.getLogger(__name__)
@@ -738,14 +738,12 @@ class reStructuredTextChecker(object):
         except ParseError as err:
             msg = "%s%03i %s" % (rst_prefix,
                                  rst_fail_parse,
-                                 "Failed to parse file: %s - %s"
-                                 % (self.filename, err))
+                                 "Failed to parse file: %s" % err)
             yield 0, 0, msg, type(self)
         except AllError as err:
             msg = "%s%03i %s" % (rst_prefix,
                                  rst_fail_all,
-                                 "Failed to parse __all__ entry: %s"
-                                 % self.filename)
+                                 "Failed to parse __all__ entry.")
             yield 0, 0, msg, type(self)
         for definition in module:
             if not definition.docstring:
@@ -765,8 +763,8 @@ class reStructuredTextChecker(object):
                 # e.g. UnicodeDecodeError
                 msg = "%s%03i %s" % (rst_prefix,
                                      rst_fail_lint,
-                                     "Failed to lint docstring: %s in %s: %s"
-                                     % (definition.name, self.filename, err))
+                                     "Failed to lint docstring: %s - %s"
+                                     % (definition.name, err))
                 yield definition.start, 0, msg, type(self)
                 continue
             for rst_error in rst_errors:

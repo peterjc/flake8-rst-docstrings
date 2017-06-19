@@ -18,12 +18,104 @@ except ImportError:  # Python 3.0 and later
     from io import StringIO
     from io import TextIOWrapper
 
+#####################################
+# Start of backported tokenize code #
+#####################################
+
 # If possible (python >= 3.2) use tokenize.open to open files, so PEP 263
 # encoding markers are interpreted.
 try:
     tokenize_open = tk.open
 except AttributeError:
-    tokenize_open = open
+    # Fall back on a backport of the encoding aware tokenize open function,
+    # which requires we back port tokenize.detect_encoding to implement.
+    from codecs import lookup, BOM_UTF8
+    from io import open as io_open
+
+    cookie_re = re.compile(r'^[ \t\f]*#.*?coding[:=][ \t]*([-\w.]+)')
+    blank_re = re.compile(br'^[ \t\f]*(?:[#\r\n]|$)')
+
+    def _get_normal_name(orig_enc):
+        """Imitates get_normal_name in tokenizer.c (PRIVATE)."""
+        # Only care about the first 12 characters.
+        enc = orig_enc[:12].lower().replace("_", "-")
+        if enc == "utf-8" or enc.startswith("utf-8-"):
+            return "utf-8"
+        if enc in ("latin-1", "iso-8859-1", "iso-latin-1") or \
+                enc.startswith(("latin-1-", "iso-8859-1-", "iso-latin-1-")):
+            return "iso-8859-1"
+        return orig_enc
+
+    def _find_cookie(line, filename, bom_found):
+        """Find encoding string in a line of Python (PRIVATE)."""
+        match = cookie_re.match(line)
+        if not match:
+            return None
+        encoding = _get_normal_name(match.group(1))
+        try:
+            lookup(encoding)
+        except LookupError:
+            # This behaviour mimics the Python interpreter
+            raise SyntaxError(
+                "unknown encoding for {!r}: {}".format(
+                    filename, encoding))
+
+        if bom_found:
+            if encoding != 'utf-8':
+                # This behaviour mimics the Python interpreter
+                raise SyntaxError(
+                    'encoding problem for {!r}: utf-8'.format(filename))
+            encoding += '-sig'
+        return encoding
+
+    def tokenize_open(filename):
+        """Simulate opening a Python file read only with the correct encoding.
+
+        While this was based on the Python 3 standard library function
+        tokenize.open in order to backport it to Python 2.7, this proved
+        painful.
+
+        Note that because this text will later be fed into ``exex(...)`` we
+        would hit SyntaxError encoding declaration in Unicode string, so the
+        handle returned has the encoding line masked out!
+
+        Note we don't just remove the line as that would throw off the line
+        numbers, it is replaced with a Python comment.
+        """
+        # Will check the first & second lines for an encoding
+        # AND REMOVE IT FROM THE TEXT RETURNED
+        with io_open(filename, 'rb') as handle:
+            lines = list(handle)
+
+        # Find the encoding
+        first = lines[0] if lines else b''
+        second = lines[1] if len(lines) > 1 else b''
+        default = 'utf-8'
+        bom_found = False
+        if first.startswith(BOM_UTF8):
+            bom_found = True
+            first = first[3:]
+            default = 'utf-8-sig'
+        encoding = _find_cookie(first, filename, bom_found)
+        if encoding:
+            lines[0] = "# original encoding removed\n"
+        if not encoding and not blank_re.match(first):
+            encoding = _find_cookie(second, filename, bom_found)
+            if encoding:
+                lines[1] = "# original encoding removed\n"
+        if not encoding:
+            encoding = default
+
+        # Apply the encoding, using StringIO as we removed the
+        # original encoding to help legacy code using exec.
+        # for b in lines:
+        #     sys.stderr.write(b"DEBUG: " + b)
+        return StringIO("".join(b.decode(encoding) for b in lines))
+
+
+###################################
+# End of backported tokenize code #
+###################################
 
 import restructuredtext_lint as rst_lint
 
@@ -34,6 +126,7 @@ __version__ = "0.0.5"
 log = logging.getLogger(__name__)
 
 rst_prefix = "RST"
+rst_fail_load = 900
 rst_fail_parse = 901
 rst_fail_all = 902
 rst_fail_lint = 903
@@ -127,14 +220,6 @@ def trim(docstring):
 ##################################################
 # Start of code copied from pydocstyle/parser.py #
 ##################################################
-
-
-class ParseError(Exception):
-    """Parser error."""
-
-    def __str__(self):
-        """Exception as a string."""
-        return "Cannot parse file."
 
 
 def humanize(string):
@@ -401,11 +486,8 @@ class Parser(object):
         self.log = log
         self.source = filelike.readlines()
         src = ''.join(self.source)
-        try:
-            compile(src, filename, 'exec')
-        except SyntaxError:
-            raise ParseError()
-            # six.raise_from(ParseError(), error)
+        # This may raise a SyntaxError:
+        compile(src, filename, 'exec')
         self.stream = TokenStream(StringIO(src))
         self.filename = filename
         self.all = None
@@ -729,13 +811,26 @@ class reStructuredTextChecker(object):
         """Initialise."""
         self.tree = tree
         self.filename = filename
-        self.load_source()
+        try:
+            self.load_source()
+            self.err = None
+        except Exception as err:
+            self.source = None
+            self.err = err
 
     def run(self):
         """Use docutils to check docstrings are valid RST."""
+        # Is there any reason not to call load_source here?
+        if self.err is not None:
+            assert self.source is None
+            msg = "%s%03i %s" % (rst_prefix,
+                                 rst_fail_load,
+                                 "Failed to load file: %s" % self.err)
+            yield 0, 0, msg, type(self)
+            module = []
         try:
             module = parse(StringIO(self.source), self.filename)
-        except ParseError as err:
+        except SyntaxError as err:
             msg = "%s%03i %s" % (rst_prefix,
                                  rst_fail_parse,
                                  "Failed to parse file: %s" % err)
@@ -803,5 +898,9 @@ class reStructuredTextChecker(object):
                 self.source = TextIOWrapper(sys.stdin.buffer,
                                             errors='ignore').read()
         else:
-            with tokenize_open(self.filename) as fd:
-                self.source = fd.read()
+            # Could be a Python 2.7 StringIO with no context manager, sigh.
+            # with tokenize_open(self.filename) as fd:
+            #     self.source = fd.read()
+            handle = tokenize_open(self.filename)
+            self.source = handle.read()
+            handle.close()

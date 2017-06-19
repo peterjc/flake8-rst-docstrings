@@ -26,6 +26,7 @@ install:
  - python setup.py install
 
 script:
+ - echo "On this machine \$LANG=$LANG"
  - echo "Checking our own docstrings are valid RST"
  - flake8 --select RST flake8_rst_docstrings.py
  - echo "Checking we can parse our valid test cases"

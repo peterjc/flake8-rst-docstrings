@@ -5,12 +5,12 @@ soucre code.
 """
 
 import logging
+import re
 import sys
 import textwrap
 
 import tokenize as tk
 from itertools import chain, dropwhile
-from re import compile as re
 
 try:
     from StringIO import StringIO
@@ -139,7 +139,7 @@ class ParseError(Exception):
 
 def humanize(string):
     """Make a string human readable."""
-    return re(r'(.)([A-Z]+)').sub(r'\1 \2', string).lower()
+    return re.compile(r'(.)([A-Z]+)').sub(r'\1 \2', string).lower()
 
 
 class Value(object):
@@ -279,7 +279,7 @@ class Method(Function):
         # Check if we are a setter/deleter method, and mark as private if so.
         for decorator in self.decorators:
             # Given 'foo', match 'foo.bar' but not 'foobar' or 'sfoo'
-            if re(r"^{}\.".format(self.name)).match(decorator.name):
+            if re.compile(r"^{}\.".format(self.name)).match(decorator.name):
                 return False
         name_is_public = (not self.name.startswith('_') or
                           self.name in VARIADIC_MAGIC_METHODS or

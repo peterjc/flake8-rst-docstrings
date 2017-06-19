@@ -71,7 +71,15 @@ validation error for which we have yet to assign a unique validation code
 in the assocated range, which would be ``RST4##`` in this example.
 
 Codes starting ``RST9##`` indicate there was a problem parsing the Python
-file in order to extract the docstrings.
+file in order to extract the docstrings, or in processing the contents.
+
+====== =======================================================================
+Code   Description (and notes)
+------ -----------------------------------------------------------------------
+RST901 Failed to parse file
+RST902 Failed to parse __all__ entry
+RST903 Failed to lint docstring (e.g. unicode encoding issue under Python 2)
+====== =======================================================================
 
 
 Installation and usage
@@ -112,6 +120,7 @@ v0.0.2  2017-06-16 - Explicitly depend on flake8 v3.0.0 or later.
 v0.0.3  2017-06-16 - Ensure plugin code and RST files themselves validate.
                    - Removed unused import of ``six`` module.
                    - Basic continuous integration checks with TravisCI.
+v0.0.4  2017-06-19 - Catch docstring linting failures, report as ``RST903``.
 ======= ========== ===========================================================
 
 

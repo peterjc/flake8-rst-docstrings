@@ -28,7 +28,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 log = logging.getLogger(__name__)
@@ -36,6 +36,7 @@ log = logging.getLogger(__name__)
 rst_prefix = "RST"
 rst_fail_parse = 901
 rst_fail_all = 902
+rst_fail_lint = 903
 
 # Level 1 - info
 code_mapping_info = {
@@ -737,46 +738,60 @@ class reStructuredTextChecker(object):
         except ParseError as err:
             msg = "%s%03i %s" % (rst_prefix,
                                  rst_fail_parse,
-                                 "docstring parsing failed: %s" % err)
+                                 "Failed to parse file: %s - %s"
+                                 % (self.filename, err))
             yield 0, 0, msg, type(self)
         except AllError as err:
             msg = "%s%03i %s" % (rst_prefix,
                                  rst_fail_all,
-                                 "docstring parsing failed on __all__ entry")
+                                 "Failed to parse __all__ entry: %s"
+                                 % self.filename)
             yield 0, 0, msg, type(self)
         for definition in module:
-            if definition.docstring:
+            if not definition.docstring:
+                # People can use flake8-docstrings to report missing
+                # docstrings
+                continue
+            # Note we use the PEP257 trim algorithm to remove the
+            # leading whitespace from each line - this avoids false
+            # positive severe error "Unexpected section title."
+            unindented = trim(definition.docstring)
+            try:
                 # Off load RST validation to reStructuredText-lint
                 # which calls docutils internally.
-                # TODO: Should we path the Python filename as filepath?
+                # TODO: Should we pass the Python filename as filepath?
+                rst_errors = list(rst_lint.lint(unindented))
+            except Exception as err:
+                # e.g. UnicodeDecodeError
+                msg = "%s%03i %s" % (rst_prefix,
+                                     rst_fail_lint,
+                                     "Failed to lint docstring: %s in %s: %s"
+                                     % (definition.name, self.filename, err))
+                yield definition.start, 0, msg, type(self)
+                continue
+            for rst_error in rst_errors:
+                # TODO - make this a configuration option?
+                if rst_error.level <= 1:
+                    continue
+                # Levels:
                 #
-                # Note we use the PEP257 trim algorithm to remove the
-                # leading whitespace from each line - this avoids false
-                # positive severe error "Unexpected section title."
-                for rst_error in rst_lint.lint(trim(definition.docstring)):
-                    # TODO - make this a configuration option?
-                    if rst_error.level <= 1:
-                        continue
-                    # Levels:
-                    #
-                    # 0 - debug   --> we don't receive these
-                    # 1 - info    --> RST1## codes
-                    # 2 - warning --> RST2## codes
-                    # 3 - error   --> RST3## codes
-                    # 4 - severe  --> RST4## codes
-                    #
-                    # Map the string to a unique code:
-                    msg = rst_error.message.split("\n", 1)[0]
-                    code = code_mappings_by_level[rst_error.level].get(msg, 99)
-                    assert code < 100, code
-                    code += 100 * rst_error.level
-                    msg = "%s%03i %s" % (rst_prefix, code, msg)
+                # 0 - debug   --> we don't receive these
+                # 1 - info    --> RST1## codes
+                # 2 - warning --> RST2## codes
+                # 3 - error   --> RST3## codes
+                # 4 - severe  --> RST4## codes
+                #
+                # Map the string to a unique code:
+                msg = rst_error.message.split("\n", 1)[0]
+                code = code_mappings_by_level[rst_error.level].get(msg, 99)
+                assert code < 100, code
+                code += 100 * rst_error.level
+                msg = "%s%03i %s" % (rst_prefix, code, msg)
 
-                    # This will return the line number by combining the
-                    # start of the docstring with the offet within it.
-                    # We don't know the column number, leaving as zero.
-                    # TODO: Check for off-by-one in line number
-                    yield definition.start + rst_error.line, 0, msg, type(self)
+                # This will return the line number by combining the
+                # start of the docstring with the offet within it.
+                # We don't know the column number, leaving as zero.
+                yield definition.start + rst_error.line, 0, msg, type(self)
 
     def load_source(self):
         """Load the source for the specified file."""

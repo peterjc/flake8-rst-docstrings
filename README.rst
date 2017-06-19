@@ -65,7 +65,7 @@ severe or critical errors in RST validation, ``RST3##`` are major errors,
 
 Codes ending ``99``, for example ``RST499``, indicate a previously unseen
 validation error for which we have yet to assign a unique validation code
-in the assocated range, which would be``RST4##`` in this example.
+in the assocated range, which would be ``RST4##`` in this example.
 
 Codes starting ``RST9##`` indicate there was a problem parsing the Python
 file in order to extract the docstrings.

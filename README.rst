@@ -66,6 +66,43 @@ using one hundred times the level. i.e. Validation codes ``RST4##`` are
 severe or critical errors in RST validation, ``RST3##`` are major errors,
 ``RST2##`` are warnings, while if shown ``RST1##`` are information only.
 
+Warning codes:
+
+====== =======================================================================
+Code   Description
+------ -----------------------------------------------------------------------
+RST201 Block quote ends without a blank line; unexpected unindent.
+RST202 Bullet list ends without a blank line; unexpected unindent.
+RST203 Definition list ends without a blank line; unexpected unindent.
+RST204 Enumerated list ends without a blank line; unexpected unindent.
+RST205 Explicit markup ends without a blank line; unexpected unindent.
+RST206 Field list ends without a blank line; unexpected unindent.
+RST207 Literal block ends without a blank line; unexpected unindent.
+RST208 Option list ends without a blank line; unexpected unindent.
+RST210 Inline strong start-string without end-string.
+RST211 Blank line required after table.
+RST299 Previously unseen warning, not yet assigned a unique code.
+====== =======================================================================
+
+Major error codes:
+
+====== =======================================================================
+Code   Description
+------ -----------------------------------------------------------------------
+RST301 Unexpected indentation.
+RST302 Malformed table.
+RST399 Previously unseen major error, not yet assigned a unique code.
+====== =======================================================================
+
+Severe or critial error codes:
+
+====== =======================================================================
+Code   Description
+------ -----------------------------------------------------------------------
+RST401 Unexpected section title.
+RST499 Previously unseen severe error, not yet assigned a unique code.
+====== =======================================================================
+
 Codes ending ``99``, for example ``RST499``, indicate a previously unseen
 validation error for which we have yet to assign a unique validation code
 in the assocated range, which would be ``RST4##`` in this example.

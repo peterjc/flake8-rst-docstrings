@@ -172,6 +172,12 @@ Developers
 
 This plugin is on GitHub at https://github.com/peterjc/flake8-rst-docstrings
 
+To make a new release once tested locally and on TravisCI::
+
+    $ git tag vX.Y.Z
+    $ python setup.py sdist --formats=gztar
+    $ twine upload dist/flake8-rst-docstrings-X.Y.Z.tar.gz
+    $ git push origin master --tags
 
 TODO
 ----

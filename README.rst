@@ -123,7 +123,8 @@ RST903 Failed to lint docstring (e.g. unicode encoding issue under Python 2)
 Installation and usage
 ----------------------
 
-Python 3.6 or later is recommended, but Python 2.7 is also supported.
+Python 3.6 or later is recommended, but Python 2.7 and Python 3.3 onwards are
+also supported.
 
 We recommend installing this plugin and ``flake8`` itself using pip::
 

@@ -161,6 +161,8 @@ v0.0.3  2017-06-16 - Ensure plugin code and RST files themselves validate.
 v0.0.4  2017-06-19 - Catch docstring linting failures, report as ``RST903``.
 v0.0.5  2017-06-19 - Support PEP263 style encoding declaration under Python 2,
                      introduced ``RST900`` when fail to open the file.
+v0.0.6  2017-08-18 - Support PEP263 style encodings following a hashbang line
+                     (bug fix for issue #2).
 ======= ========== ===========================================================
 
 

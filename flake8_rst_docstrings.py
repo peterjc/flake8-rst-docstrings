@@ -35,8 +35,19 @@ except AttributeError:
     cookie_re = re.compile(r'^[ \t\f]*#.*?coding[:=][ \t]*([-\w.]+)')
     blank_re = re.compile(br'^[ \t\f]*(?:[#\r\n]|$)')
 
+    # I don't think 'blank regular expression' is well named, think
+    # it looks for blank line after any Python # comment removed.
+    # Key test case of interest is hashbang lines!
+    assert blank_re.match(b"\n")
+    assert blank_re.match(b"# Comment\n")
+    assert blank_re.match(b"#!/usr/bin/python\n")
+    assert blank_re.match(b"#!/usr/bin/env python\n")
+    assert not blank_re.match(b'"""Welcome\n')
+    assert not blank_re.match(b'"""Welcome"""\n')
+
     def _get_normal_name(orig_enc):
         """Imitates get_normal_name in tokenizer.c (PRIVATE)."""
+        # sys.stderr.write("DEBUG: _get_normal_name(%r)\n" % orig_enc)
         # Only care about the first 12 characters.
         enc = orig_enc[:12].lower().replace("_", "-")
         if enc == "utf-8" or enc.startswith("utf-8-"):
@@ -48,6 +59,8 @@ except AttributeError:
 
     def _find_cookie(line, filename, bom_found):
         """Find encoding string in a line of Python (PRIVATE)."""
+        # sys.stderr.write("DEBUG: _find_cookie(%r, %r, %r)\n"
+        #                  % (line, filename, bom_found))
         match = cookie_re.match(line)
         if not match:
             return None
@@ -82,6 +95,7 @@ except AttributeError:
         Note we don't just remove the line as that would throw off the line
         numbers, it is replaced with a Python comment.
         """
+        # sys.stderr.write("DEBUG: tokenize_open(%r)\n" % filename)
         # Will check the first & second lines for an encoding
         # AND REMOVE IT FROM THE TEXT RETURNED
         with io_open(filename, 'rb') as handle:
@@ -99,12 +113,17 @@ except AttributeError:
         encoding = _find_cookie(first, filename, bom_found)
         if encoding:
             lines[0] = "# original encoding removed\n"
-        if not encoding and not blank_re.match(first):
+        if not encoding and blank_re.match(first):
+            # sys.stderr.write("DEBUG: Trying second line %r\n"
+            #                  % second)
             encoding = _find_cookie(second, filename, bom_found)
             if encoding:
                 lines[1] = "# original encoding removed\n"
         if not encoding:
             encoding = default
+
+        # sys.stderr.write("DEBUG: tokenize_open using encoding=%r\n"
+        #                  % encoding)
 
         # Apply the encoding, using StringIO as we removed the
         # original encoding to help legacy code using exec.
@@ -120,7 +139,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 
 log = logging.getLogger(__name__)

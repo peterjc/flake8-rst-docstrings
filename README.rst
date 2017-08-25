@@ -188,3 +188,4 @@ TODO
 - Have the "INFO" level ``RST1##`` codes available but ignored by default?
 - Can we call ``docutils`` rather than bundle a copy of their parser code?
 - Create a test suite and use this for continuous integration.
+- Test with raw mode docstrings and slash-escaped characters.

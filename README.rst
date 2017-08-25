@@ -164,6 +164,9 @@ v0.0.5  2017-06-19 - Support PEP263 style encoding declaration under Python 2.
                    - Introduced ``RST900`` when fail to open the file.
 v0.0.6  2017-08-18 - Support PEP263 style encodings following a hashbang line
                      (bug fix for issue #2).
+v0.0.7  2017-08-25 - Remove triple-quotes before linting, was causing false
+                     positives reporting RST entries ending without a blank
+                     line at end of docstrings (bug fix for issue #1).
 ======= ========== ===========================================================
 
 

@@ -139,7 +139,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 
 log = logging.getLogger(__name__)
@@ -235,6 +235,22 @@ def trim(docstring):
 ##################################
 # End of code copied from PEP257 #
 ##################################
+
+
+def dequote_docstring(text):
+    """Remove the quotes delimiting a docstring."""
+    text = text.strip()
+    if len(text) > 6 and text[:3] == text[-3:] == '"""':
+        return text[3:-3]
+    # Other flake8 tools will report atypical quotes:
+    if len(text) > 6 and text[:3] == text[-3:] == "'''":
+        return text[3:-3]
+    if len(text) > 2 and text[0] == text[-1] == '"':
+        return text[1:-1]
+    if len(text) > 2 and text[0] == text[-1] == "'":
+        return text[1:-1]
+    raise ValueError("Bad quotes!")
+
 
 ##################################################
 # Start of code copied from pydocstyle/parser.py #
@@ -866,11 +882,11 @@ class reStructuredTextChecker(object):
                 # People can use flake8-docstrings to report missing
                 # docstrings
                 continue
-            # Note we use the PEP257 trim algorithm to remove the
-            # leading whitespace from each line - this avoids false
-            # positive severe error "Unexpected section title."
-            unindented = trim(definition.docstring)
             try:
+                # Note we use the PEP257 trim algorithm to remove the
+                # leading whitespace from each line - this avoids false
+                # positive severe error "Unexpected section title."
+                unindented = trim(dequote_docstring(definition.docstring))
                 # Off load RST validation to reStructuredText-lint
                 # which calls docutils internally.
                 # TODO: Should we pass the Python filename as filepath?

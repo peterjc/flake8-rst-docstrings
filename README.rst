@@ -91,6 +91,8 @@ Code   Description
 ------ -----------------------------------------------------------------------
 RST301 Unexpected indentation.
 RST302 Malformed table.
+RST303 Unknown directive type "XXX".
+RST304 Unknown interpreted text role "XXX".
 RST399 Previously unseen major error, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -167,6 +169,8 @@ v0.0.6  2017-08-18 - Support PEP263 style encodings following a hashbang line
 v0.0.7  2017-08-25 - Remove triple-quotes before linting, was causing false
                      positives reporting RST entries ending without a blank
                      line at end of docstrings (bug fix for issue #1).
+v0.0.8  2017-10-09 - Adds ``RST303`` and ``RST304`` for unknown directives and
+                     interpreted text role as used in Sphinx-Needs extension.
 ======= ========== ===========================================================
 
 

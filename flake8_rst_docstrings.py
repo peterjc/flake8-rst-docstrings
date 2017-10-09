@@ -139,7 +139,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 
 
 log = logging.getLogger(__name__)
@@ -176,6 +176,10 @@ code_mapping_warning = {
 code_mapping_error = {
     "Unexpected indentation.": 1,
     "Malformed table.": 2,
+    # e.g. Unknown directive type "req".
+    "Unknown directive type": 3,
+    # e.g. Unknown interpreted text role "need".
+    "Unknown interpreted text role": 4,
 }
 
 # Level 4 - severe
@@ -190,7 +194,23 @@ code_mappings_by_level = {
     4: code_mapping_severe,
 }
 
-# TODO: Dynamic entries like 'Unknown directive type "%s".'
+
+def code_mapping(level, msg, default=99):
+    """Return an error code between 0 and 99."""
+    try:
+        return code_mappings_by_level[level][msg]
+    except KeyError:
+        pass
+    # Following assumes any variable messages take the format
+    # of 'Fixed text "variable text".' only:
+    # e.g. 'Unknown directive type "req".'
+    # ---> 'Unknown directive type'
+    # e.g. 'Unknown interpreted text role "need".'
+    # ---> 'Unknown interpreted text role'
+    if msg.count('"') == 2 and ' "' in msg and msg.endswith('".'):
+        txt = msg[:msg.index(' "')]
+        return code_mappings_by_level[level].get(txt, default)
+    return default
 
 ####################################
 # Start of code copied from PEP257 #
@@ -924,7 +944,7 @@ class reStructuredTextChecker(object):
                 #
                 # Map the string to a unique code:
                 msg = rst_error.message.split("\n", 1)[0]
-                code = code_mappings_by_level[rst_error.level].get(msg, 99)
+                code = code_mapping(rst_error.level, msg)
                 assert code < 100, code
                 code += 100 * rst_error.level
                 msg = "%s%03i %s" % (rst_prefix, code, msg)

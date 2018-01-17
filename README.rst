@@ -107,7 +107,9 @@ RST499 Previously unseen severe error, not yet assigned a unique code.
 
 Codes ending ``99``, for example ``RST499``, indicate a previously unseen
 validation error for which we have yet to assign a unique validation code
-in the assocated range, which would be ``RST4##`` in this example.
+in the assocated range, which would be ``RST4##`` in this example. If you see
+one of these codes, please report it on our GitHub issue tracker, ideally with
+an example we can use for testing.
 
 Codes starting ``RST9##`` indicate there was a problem parsing the Python
 file in order to extract the docstrings, or in processing the contents.
@@ -191,5 +193,5 @@ TODO
 
 - Have the "INFO" level ``RST1##`` codes available but ignored by default?
 - Can we call ``docutils`` rather than bundle a copy of their parser code?
-- Create a test suite and use this for continuous integration.
+- Create a full test suite and use this for continuous integration.
 - Test with raw mode docstrings and slash-escaped characters.

@@ -182,6 +182,112 @@ code_mapping_error = {
     "Unknown interpreted text role": 4,
 }
 
+# RST303 Unknown directive type "XXX".
+# RST304 Unknown interpreted text role "XXX".
+#
+# These default lists are from Sphinx 1.6.6, determined as follows:
+#
+# from sphinx.application import Sphinx
+# s = Sphinx('.', None, '.', '.', 'html')
+# print("known_directives = set([")
+# for d in ('py', 'rst', 'std'):
+#     for dir in sorted(s.registry.domains[d].directives):
+#         print("    %r, %r," % (d + ':' + dir, dir))
+# print("])")
+# print("known_roles = set([")
+# for d in ('py', 'rst', 'std'):
+#     for role in sorted(s.registry.domains[d].roles):
+#         print("    %r, %r," % (d + ':' + role, role))
+# print("])")
+#
+known_directives = set(
+    [
+        "py:attribute",
+        "attribute",
+        "py:class",
+        "class",
+        "py:classmethod",
+        "classmethod",
+        "py:currentmodule",
+        "currentmodule",
+        "py:data",
+        "data",
+        "py:decorator",
+        "decorator",
+        "py:decoratormethod",
+        "decoratormethod",
+        "py:exception",
+        "exception",
+        "py:function",
+        "function",
+        "py:method",
+        "method",
+        "py:module",
+        "module",
+        "py:staticmethod",
+        "staticmethod",
+        "rst:directive",
+        "directive",
+        "rst:role",
+        "role",
+        "std:cmdoption",
+        "cmdoption",
+        "std:envvar",
+        "envvar",
+        "std:glossary",
+        "glossary",
+        "std:option",
+        "option",
+        "std:productionlist",
+        "productionlist",
+        "std:program",
+        "program",
+    ]
+)
+
+known_roles = set(
+    [
+        "py:attr",
+        "attr",
+        "py:class",
+        "class",
+        "py:const",
+        "const",
+        "py:data",
+        "data",
+        "py:exc",
+        "exc",
+        "py:func",
+        "func",
+        "py:meth",
+        "meth",
+        "py:mod",
+        "mod",
+        "py:obj",
+        "obj",
+        "rst:dir",
+        "dir",
+        "rst:role",
+        "role",
+        "std:doc",
+        "doc",
+        "std:envvar",
+        "envvar",
+        "std:keyword",
+        "keyword",
+        "std:numref",
+        "numref",
+        "std:option",
+        "option",
+        "std:ref",
+        "ref",
+        "std:term",
+        "term",
+        "std:token",
+        "token",
+    ]
+)
+
 # Level 4 - severe
 code_mapping_severe = {"Unexpected section title.": 1}
 
@@ -207,6 +313,11 @@ def code_mapping(level, msg, default=99):
     # ---> 'Unknown interpreted text role'
     if msg.count('"') == 2 and ' "' in msg and msg.endswith('".'):
         txt = msg[: msg.index(' "')]
+        value = msg.split('"', 2)[1]
+        if txt == "Unknown directive type" and value in known_directives:
+            return 0
+        if txt == "Unknown interpreted text role" and value in known_roles:
+            return 0
         return code_mappings_by_level[level].get(txt, default)
     return default
 
@@ -1039,7 +1150,10 @@ class reStructuredTextChecker(object):
                 # Map the string to a unique code:
                 msg = rst_error.message.split("\n", 1)[0]
                 code = code_mapping(rst_error.level, msg)
-                assert code < 100, code
+                if not code:
+                    # We ignored it, e.g. a known Sphinx role
+                    continue
+                assert 0 < code < 100, code
                 code += 100 * rst_error.level
                 msg = "%s%03i %s" % (rst_prefix, code, msg)
 

@@ -902,7 +902,7 @@ class reStructuredTextChecker(object):
                                  "Failed to parse file: %s" % err)
             yield 0, 0, msg, type(self)
             module = []
-        except AllError as err:
+        except AllError:
             msg = "%s%03i %s" % (rst_prefix,
                                  rst_fail_all,
                                  "Failed to parse __all__ entry.")

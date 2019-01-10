@@ -64,7 +64,8 @@ currently ignores the "INFO" level messages.
 Within each category, the individual messages are mapped to ``flake8`` codes
 using one hundred times the level. i.e. Validation codes ``RST4##`` are
 severe or critical errors in RST validation, ``RST3##`` are major errors,
-``RST2##`` are warnings, while if shown ``RST1##`` are information only.
+``RST2##`` are warnings, and while currently not yet used, ``RST1##`` would
+be information only.
 
 Warning codes:
 

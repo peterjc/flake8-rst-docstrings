@@ -20,11 +20,11 @@ before_install:
  - "if grep '\t' *.py *.rst; then echo 'Tabs are bad, please use four spaces.'; false; fi"
  - "if grep -n -r '[[:blank:]]$' *.py *.rst; then echo 'Please remove trailing whitespace.'; false; fi"
  - pip install --upgrade pip setuptools
- - pip install flake8 flake8-docstrings restructuredtext-lint
- - echo "Using flake8 to check Python code"
+ - pip install flake8 flake8-black flake8-docstrings restructuredtext-lint
+ - echo "Using restructuredtext-lint to check documentation"
  - restructuredtext-lint *.rst
  - echo "Using flake8 to check Python code"
- - flake8 flake8_rst_docstrings.py
+ - flake8 setup.py flake8_rst_docstrings.py
 
 install:
  - python setup.py install
@@ -32,7 +32,7 @@ install:
 script:
  - echo "On this machine \$LANG=$LANG"
  - echo "Checking our own docstrings are valid RST"
- - flake8 --select RST flake8_rst_docstrings.py
+ - flake8 --select RST setup.py flake8_rst_docstrings.py
  - echo "Checking we can parse our valid test cases"
  - flake8 --select RST --ignore RST303,RST304 tests/test_cases/*.py
 

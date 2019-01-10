@@ -10,6 +10,9 @@ flake8-rst-docstrings
 .. image:: https://landscape.io/github/peterjc/flake8-rst-docstrings/master/landscape.svg?style=flat
    :alt: Landscape Code Metrics
    :target: https://landscape.io/github/peterjc/flake8-rst-docstrings/
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :alt: Code style: black
+   :target: https://github.com/ambv/black
 
 Introduction
 ------------

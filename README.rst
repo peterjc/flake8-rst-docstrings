@@ -32,6 +32,11 @@ Todd Wolfson's ``restructuredtext-lint`` code:
 - http://docutils.sourceforge.net/
 - https://github.com/twolfson/restructuredtext-lint
 
+You may *also* wish to install the related flake8 plugin `flake8-rst
+<https://github.com/kataev/flake8-rst>`_ which can check the Python style
+of doctest formatted snippets of Python code within your ``*.rst`` files
+or the docstrings within your ``*.py`` files.
+
 Flake8 Validation codes
 -----------------------
 

@@ -1,14 +1,18 @@
+"""Setup file for building/installing flake8-black."""
+
 from __future__ import with_statement
 from __future__ import print_function
 
-import os
 from setuptools import setup
 
+
 def get_version(fname="flake8_rst_docstrings.py"):
+    """Parse our source code to get the current version number."""
     with open(fname) as f:
         for line in f:
             if line.startswith("__version__"):
                 return eval(line.split("=")[-1])
+
 
 setup(
     name="flake8-rst-docstrings",

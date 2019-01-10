@@ -35,6 +35,12 @@ Todd Wolfson's ``restructuredtext-lint`` code:
 - http://docutils.sourceforge.net/
 - https://github.com/twolfson/restructuredtext-lint
 
+I recommend you *also* install the related `flake8-docstrings
+<https://gitlab.com/pycqa/flake8-docstrings>`_ plugin, which brings
+the `pydocstyle <https://github.com/pycqa/pydocstyle>`_ checks into flake8.
+This checks things like missing docstrings, and other recommendations from
+`PEP 257 Docstring Conventions <https://www.python.org/dev/peps/pep-0257/>`_.
+
 You may *also* wish to install the related flake8 plugin `flake8-rst
 <https://github.com/kataev/flake8-rst>`_ which can check the Python style
 of doctest formatted snippets of Python code within your ``*.rst`` files

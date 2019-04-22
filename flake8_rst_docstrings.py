@@ -170,6 +170,7 @@ code_mapping_warning = {
     # Other:
     "Inline strong start-string without end-string.": 10,
     "Blank line required after table.": 11,
+    "Title underline too short.": 12,
 }
 
 # Level 3 - error
@@ -180,6 +181,10 @@ code_mapping_error = {
     "Unknown directive type": 3,
     # e.g. Unknown interpreted text role "need".
     "Unknown interpreted text role": 4,
+    # e.g. Undefined substitution referenced: "dict".
+    "Undefined substitution referenced:": 5,
+    # e.g. Unknown target name: "license_txt".
+    "Unknown target name:": 6,
 }
 
 # Level 4 - severe

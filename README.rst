@@ -99,6 +99,7 @@ RST207 Literal block ends without a blank line; unexpected unindent.
 RST208 Option list ends without a blank line; unexpected unindent.
 RST210 Inline strong start-string without end-string.
 RST211 Blank line required after table.
+RST212 Title underline too short.
 RST299 Previously unseen warning, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -111,6 +112,8 @@ RST301 Unexpected indentation.
 RST302 Malformed table.
 RST303 Unknown directive type "XXX".
 RST304 Unknown interpreted text role "XXX".
+RST305 Undefined substitution referenced: "XXX".
+RST306 Unknown target name: "XXX".
 RST399 Previously unseen major error, not yet assigned a unique code.
 ====== =======================================================================
 

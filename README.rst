@@ -194,7 +194,9 @@ v0.0.7  2017-08-25 - Remove triple-quotes before linting, was causing false
                      line at end of docstrings (bug fix for issue #1).
 v0.0.8  2017-10-09 - Adds ``RST303`` and ``RST304`` for unknown directives and
                      interpreted text role as used in Sphinx-Needs extension.
-v0.0.9  *pending*  - Checks positive and negative examples in test framework.
+v0.0.9  2019-04-22 - Checks positive and negative examples in test framework.
+                   - Adds ``RST212``, ``RST305`` and ``RST306`` (contribution
+                     from Brian Skinn).
 ======= ========== ===========================================================
 
 

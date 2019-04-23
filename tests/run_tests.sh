@@ -8,8 +8,11 @@ for code in RST??? ; do
     echo "======"
     echo $code
     echo "======"
-    flake8 --select RST $code/ 2>&1 | grep $code
-    echo "Return code $? from $code tests"
+    for file in $code/*.py ; do
+        echo "flake8 --select RST $file"
+        flake8 --select RST $file 2>&1 | grep $code
+    done
+    echo "Good, $code violations reported, as expected."
 done
 # echo "Positive tests passed (RST errors reported as expected)."
 
@@ -19,8 +22,9 @@ set -o pipefail
 echo "========="
 echo "Negatives"
 echo "========="
+echo "flake8 --select RST test_cases/"
 flake8 --select RST test_cases/
-#echo "Negative tests passed (no RST errors reported as expected)."
+echo "Good, no RST style violations reported, as expected."
 
 echo "============"
 echo "Tests passed"

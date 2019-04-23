@@ -1,6 +1,8 @@
 """Example reStructuredText from Sphinx-Needs project.
 
 From http://sphinxcontrib-needs.readthedocs.io/en/latest/
+but cut down and may not work in isolation. Intended just
+to trigger RST303.
 
 **Some data**
 
@@ -23,11 +25,6 @@ From http://sphinxcontrib-needs.readthedocs.io/en/latest/
    also a *status* is given.
 
 **Some text**
-
-Wohooo, we have created :need:`req_001`,
-which is linked by :need_incoming:`req_001`.
-
-**A filter**
 
 .. needfilter::
    :tags: example

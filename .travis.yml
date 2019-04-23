@@ -34,8 +34,8 @@ script:
  - echo "On this machine \$LANG=$LANG"
  - echo "Checking our own docstrings are valid RST"
  - flake8 --select RST setup.py flake8_rst_docstrings.py
- - echo "Checking we can parse our valid test cases"
- - flake8 --select RST --ignore RST303,RST304 tests/test_cases/*.py
+ - cd tests/
+ - ./run_tests.sh
 
 notifications:
   email: false

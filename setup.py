@@ -40,7 +40,5 @@ setup(
     entry_points={
         "flake8.extension": ["RST = flake8_rst_docstrings:reStructuredTextChecker"]
     },
-    extras_require={
-        'test': ["pytest>=4.4.0", "pytest-cov", "pytest-subtests"],
-    }
+    extras_require={"test": ["pytest>=4.4.0", "pytest-cov", "pytest-subtests"]},
 )

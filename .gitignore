@@ -25,3 +25,9 @@ flake8_rst_docstrings.egg-info/
 
 #Ignore python build directories
 *__pycache__
+
+#Ignore any virtualenvs
+env*
+
+#Ignore coverage cache file
+.coverage

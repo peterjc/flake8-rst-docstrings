@@ -22,3 +22,6 @@ flake8_rst_docstrings.egg-info/
 
 #Ignore hidden files from Dolphin window manager
 .directory
+
+#Ignore python build directories
+*__pycache__

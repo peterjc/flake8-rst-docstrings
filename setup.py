@@ -42,5 +42,5 @@ setup(
     },
     extras_require={
         'test': ["pytest>=4.4.0", "pytest-cov", "pytest-subtests"],
-}
+    }
 )

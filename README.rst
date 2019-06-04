@@ -154,9 +154,9 @@ Installation and usage
 Python 3.6 or later is recommended, but Python 2.7 and Python 3.3 onwards are
 also supported.
 
-We recommend installing this plugin and ``flake8`` itself using pip::
+We recommend installing the plugin using pip, which handles the dependencies::
 
-    $ pip install flake8 flake8-rst-docstrings
+    $ pip install flake8-rst-docstrings
 
 Alternatively, if you are using the Anaconda packaging system, the following
 command will install the plugin with its dependencies::

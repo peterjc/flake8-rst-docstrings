@@ -158,6 +158,11 @@ We recommend installing this plugin and ``flake8`` itself using pip::
 
     $ pip install flake8 flake8-rst-docstrings
 
+Alternatively, if you are using the Anaconda packaging system, the following
+command will install the plugin with its dependencies::
+
+    $ conda install -c conda-forge flake8-rst-docstrings
+
 The new validator should be automatically included when using ``flake8`` which
 may now report additional validation codes starting with ``RST`` (as defined
 above). For example::

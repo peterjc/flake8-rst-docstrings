@@ -222,11 +222,9 @@ To make a new release once tested locally and on TravisCI::
     $ twine upload dist/flake8-rst-docstrings-X.Y.Z.tar.gz
     $ git push origin master --tags
 
-Once that is done, you can update the `flake8-rst-docstrings conda-forge recipe
-<https://github.com/conda-forge/flake8-rst-docstrings-feedstock/blob/master/recipe/meta.yaml>`_
-with a pull request. Typically all that needs changing is the version number
-and the SHA256 checksum (which you can simply copy from the `PyPI download
-files page <https://pypi.org/project/flake8-rst-docstrings/#files>`_).
+The PyPI upload should trigger an automated pull request updating the
+`flake8-rst-docstrings conda-forge recipe
+<https://github.com/conda-forge/flake8-rst-docstrings-feedstock/blob/master/recipe/meta.yaml>`_.
 
 
 TODO

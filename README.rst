@@ -186,9 +186,11 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.0.10 2019-06-17 - Fixed flake8 "builtins" parameter warning (contribution
+                     from `Ruben, @ROpdebee <https://github.com/ROpdebee>`_).
 v0.0.9  2019-04-22 - Checks positive and negative examples in test framework.
                    - Adds ``RST212``, ``RST305`` and ``RST306`` (contribution
-                     from Brian Skinn).
+                     from `Brian Skinn <https://github.com/bskinn>`_).
 v0.0.8  2017-10-09 - Adds ``RST303`` and ``RST304`` for unknown directives and
                      interpreted text role as used in Sphinx-Needs extension.
 v0.0.7  2017-08-25 - Remove triple-quotes before linting, was causing false

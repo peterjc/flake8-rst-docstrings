@@ -186,25 +186,25 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.0.1  2017-06-16 - Initial public release.
-v0.0.2  2017-06-16 - Explicitly depend on flake8 v3.0.0 or later.
-                   - Improved documentation.
-v0.0.3  2017-06-16 - Ensure plugin code and RST files themselves validate.
-                   - Removed unused import of ``six`` module.
-                   - Basic continuous integration checks with TravisCI.
-v0.0.4  2017-06-19 - Catch docstring linting failures, report as ``RST903``.
-v0.0.5  2017-06-19 - Support PEP263 style encoding declaration under Python 2.
-                   - Introduced ``RST900`` when fail to open the file.
-v0.0.6  2017-08-18 - Support PEP263 style encodings following a hashbang line
-                     (bug fix for issue #2).
-v0.0.7  2017-08-25 - Remove triple-quotes before linting, was causing false
-                     positives reporting RST entries ending without a blank
-                     line at end of docstrings (bug fix for issue #1).
-v0.0.8  2017-10-09 - Adds ``RST303`` and ``RST304`` for unknown directives and
-                     interpreted text role as used in Sphinx-Needs extension.
 v0.0.9  2019-04-22 - Checks positive and negative examples in test framework.
                    - Adds ``RST212``, ``RST305`` and ``RST306`` (contribution
                      from Brian Skinn).
+v0.0.8  2017-10-09 - Adds ``RST303`` and ``RST304`` for unknown directives and
+                     interpreted text role as used in Sphinx-Needs extension.
+v0.0.7  2017-08-25 - Remove triple-quotes before linting, was causing false
+                     positives reporting RST entries ending without a blank
+                     line at end of docstrings (bug fix for issue #1).
+v0.0.6  2017-08-18 - Support PEP263 style encodings following a hashbang line
+                     (bug fix for issue #2).
+v0.0.5  2017-06-19 - Support PEP263 style encoding declaration under Python 2.
+                   - Introduced ``RST900`` when fail to open the file.
+v0.0.4  2017-06-19 - Catch docstring linting failures, report as ``RST903``.
+v0.0.3  2017-06-16 - Ensure plugin code and RST files themselves validate.
+                   - Removed unused import of ``six`` module.
+                   - Basic continuous integration checks with TravisCI.
+v0.0.2  2017-06-16 - Explicitly depend on flake8 v3.0.0 or later.
+                   - Improved documentation.
+v0.0.1  2017-06-16 - Initial public release.
 ======= ========== ===========================================================
 
 

@@ -15,7 +15,7 @@ flake8-rst-docstrings
    :target: https://pypistats.org/packages/flake8-rst-docstrings
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :alt: Code style: black
-   :target: https://github.com/ambv/black
+   :target: https://github.com/python/black
 
 Introduction
 ------------

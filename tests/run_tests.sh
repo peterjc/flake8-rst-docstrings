@@ -26,6 +26,20 @@ echo "flake8 --select RST test_cases/"
 flake8 --select RST test_cases/
 echo "Good, no RST style violations reported, as expected."
 
+echo "================"
+echo "Extra directives"
+echo "================"
+# Checked this failed earlier in the RST303 tests
+flake8 --select RST --rst-directives=req,spec,needfilter RST303/sphinx-directives.py
+echo "Good, no RST303 style violations reported, as expected."
+
+echo "==========="
+echo "Extra roles"
+echo "==========="
+# Checked this failed earlier in the RST304 tests
+flake8 --select RST --rst-roles need,need_incoming RST304/sphinx-roles.py
+echo "Good, no RST304 style violations reported, as expected."
+
 echo "========="
 echo "Help text"
 echo "========="

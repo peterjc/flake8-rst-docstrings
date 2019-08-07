@@ -177,12 +177,44 @@ Note in addition to the ``RST`` prefix alone you can use partial codes
 like ``RST2`` meaning ``RST200``, ``RST201``, ... and so on.
 
 
+Configuration
+-------------
+
+We assume you are familiar with `flake8 configuration
+<http://flake8.pycqa.org/en/latest/user/configuration.html>`_.
+
+If you are using Sphinx or other extensions to reStructuredText, you will
+want to define any additional directives or roles you are using to avoid
+false positive ``RST303`` and ``RST304`` violations.
+
+You can set these at the command line if you wish::
+
+    $ flake8 --rst-roles class,func,ref --rst-directives envvar,exception ...
+
+We recommend using the following settings in your ``flake8`` configuration,
+for example in your ``.flake8``, ``setup.cfg``, or ``tox.ini`` file, e.g.::
+
+    [flake8]
+    rst-roles =
+        class,
+        func,
+        ref,
+    rst-directives =
+        envvar,
+        exception,
+
+Note that flake8 allows splitting the comma separated lists over multiple
+lines, and allows including of hash comment lines.
+
+
 Version History
 ---------------
 
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.0.11 2019-08-7  - Configuration options to define additional directives and
+                     roles (e.g. from Sphinx) for ``RST303`` and ``RST304``.
 v0.0.10 2019-06-17 - Fixed flake8 "builtins" parameter warning (contribution
                      from `Ruben, @ROpdebee <https://github.com/ROpdebee>`_).
 v0.0.9  2019-04-22 - Checks positive and negative examples in test framework.

@@ -976,6 +976,32 @@ class reStructuredTextChecker(object):
             self.source = None
             self.err = err
 
+    @classmethod
+    def add_options(cls, parser):
+        """Add RST directives and roles options."""
+        parser.add_option(
+            "--rst-directives",
+            metavar="LIST",
+            default="",
+            parse_from_config=True,
+            comma_separated_list=True,
+            help="Comma-separated list of additional RST directives.",
+        )
+        parser.add_option(
+            "--rst-roles",
+            metavar="LIST",
+            default="",
+            parse_from_config=True,
+            comma_separated_list=True,
+            help="Comma-separated list of additional RST roles.",
+        )
+
+    @classmethod
+    def parse_options(cls, options):
+        """Adding black-config option."""
+        cls.extra_directives = options.rst_directives
+        cls.extra_roles = options.rst_roles
+
     def run(self):
         """Use docutils to check docstrings are valid RST."""
         # Is there any reason not to call load_source here?

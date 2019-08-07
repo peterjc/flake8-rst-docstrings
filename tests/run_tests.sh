@@ -26,6 +26,12 @@ echo "flake8 --select RST test_cases/"
 flake8 --select RST test_cases/
 echo "Good, no RST style violations reported, as expected."
 
+echo "========="
+echo "Help text"
+echo "========="
+flake8 -h | grep -i RST
+echo "Good, RST options appear in the help text"
+
 echo "============"
 echo "Tests passed"
 echo "============"

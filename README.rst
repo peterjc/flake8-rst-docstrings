@@ -191,7 +191,7 @@ You can set these at the command line if you wish::
 
     $ flake8 --rst-roles class,func,ref --rst-directives envvar,exception ...
 
-We recommend using the following settings in your ``flake8`` configuration,
+We recommend recording these settings in your ``flake8`` configuration,
 for example in your ``.flake8``, ``setup.cfg``, or ``tox.ini`` file, e.g.::
 
     [flake8]

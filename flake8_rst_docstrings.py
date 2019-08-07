@@ -198,7 +198,7 @@ code_mappings_by_level = {
 }
 
 
-def code_mapping(level, msg, default=99):
+def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     """Return an error code between 0 and 99."""
     try:
         return code_mappings_by_level[level][msg]
@@ -212,6 +212,11 @@ def code_mapping(level, msg, default=99):
     # ---> 'Unknown interpreted text role'
     if msg.count('"') == 2 and ' "' in msg and msg.endswith('".'):
         txt = msg[: msg.index(' "')]
+        value = msg.split('"', 2)[1]
+        if txt == "Unknown directive type" and value in extra_directives:
+            return 0
+        if txt == "Unknown interpreted text role" and value in extra_roles:
+            return 0
         return code_mappings_by_level[level].get(txt, default)
     return default
 
@@ -1069,8 +1074,13 @@ class reStructuredTextChecker(object):
                 #
                 # Map the string to a unique code:
                 msg = rst_error.message.split("\n", 1)[0]
-                code = code_mapping(rst_error.level, msg)
-                assert code < 100, code
+                code = code_mapping(
+                    rst_error.level, msg, self.extra_directives, self.extra_roles
+                )
+                if not code:
+                    # We ignored it, e.g. a known Sphinx role
+                    continue
+                assert 0 < code < 100, code
                 code += 100 * rst_error.level
                 msg = "%s%03i %s" % (rst_prefix, code, msg)
 

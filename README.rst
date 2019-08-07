@@ -213,7 +213,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.0.11 2019-08-7  - Configuration options to define additional directives and
+v0.0.11 2019-08-07 - Configuration options to define additional directives and
                      roles (e.g. from Sphinx) for ``RST303`` and ``RST304``.
 v0.0.10 2019-06-17 - Fixed flake8 "builtins" parameter warning (contribution
                      from `Ruben, @ROpdebee <https://github.com/ROpdebee>`_).

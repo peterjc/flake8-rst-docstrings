@@ -174,6 +174,7 @@ code_mapping_warning = {
     "Inline emphasis start-string without end-string.": 13,
     "Inline literal start-string without end-string.": 14,
     "Inline interpreted text or phrase reference start-string without end-string.": 15,
+    "Multiple roles in interpreted text (both prefix and suffix present; only one allowed).": 16,
 }
 
 # Level 3 - error

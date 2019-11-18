@@ -100,6 +100,9 @@ RST208 Option list ends without a blank line; unexpected unindent.
 RST210 Inline strong start-string without end-string.
 RST211 Blank line required after table.
 RST212 Title underline too short.
+RST213 Inline emphasis start-string without end-string.
+RST214 Inline literal start-string without end-string.
+RST215 Inline interpreted text or phrase reference start-string without end-string.
 RST299 Previously unseen warning, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -213,6 +216,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.0.12 2019-11-18 - Adds ``RST213``, ``RST214`` and ``RST215``.
 v0.0.11 2019-08-07 - Configuration options to define additional directives and
                      roles (e.g. from Sphinx) for ``RST303`` and ``RST304``.
 v0.0.10 2019-06-17 - Fixed flake8 "builtins" parameter warning (contribution

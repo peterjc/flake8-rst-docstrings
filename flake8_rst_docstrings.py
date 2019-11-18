@@ -139,7 +139,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.11"
+__version__ = "0.0.12"
 
 
 log = logging.getLogger(__name__)
@@ -171,6 +171,9 @@ code_mapping_warning = {
     "Inline strong start-string without end-string.": 10,
     "Blank line required after table.": 11,
     "Title underline too short.": 12,
+    "Inline emphasis start-string without end-string.": 13,
+    "Inline literal start-string without end-string.": 14,
+    "Inline interpreted text or phrase reference start-string without end-string.": 15,
 }
 
 # Level 3 - error

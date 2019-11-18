@@ -175,6 +175,7 @@ code_mapping_warning = {
     "Inline literal start-string without end-string.": 14,
     "Inline interpreted text or phrase reference start-string without end-string.": 15,
     "Multiple roles in interpreted text (both prefix and suffix present; only one allowed).": 16,
+    "Mismatch: both interpreted text role suffix and reference suffix.": 17,
 }
 
 # Level 3 - error

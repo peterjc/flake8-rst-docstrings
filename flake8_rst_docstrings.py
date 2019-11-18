@@ -174,7 +174,7 @@ code_mapping_warning = {
     "Inline emphasis start-string without end-string.": 13,
     "Inline literal start-string without end-string.": 14,
     "Inline interpreted text or phrase reference start-string without end-string.": 15,
-    "Multiple roles in interpreted text (both prefix and suffix present; only one allowed).": 16,
+    "Multiple roles in interpreted text (both prefix and suffix present; only one allowed).": 16,  # noqa: E501
     "Mismatch: both interpreted text role suffix and reference suffix.": 17,
 }
 
@@ -973,7 +973,7 @@ class reStructuredTextChecker(object):
     name = "rst-docstrings"
     version = __version__
 
-    STDIN_NAMES = set(["stdin", "-", "(none)", None])
+    STDIN_NAMES = {"stdin", "-", "(none)", None}
 
     def __init__(self, tree, filename="(none)"):
         """Initialise."""

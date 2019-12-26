@@ -105,6 +105,7 @@ RST214 Inline literal start-string without end-string.
 RST215 Inline interpreted text or phrase reference start-string without end-string.
 RST216 Multiple roles in interpreted text (both prefix and suffix present; only one allowed).
 RST217 Mismatch: both interpreted text role suffix and reference suffix.
+RST218 Literal block expected; none found.
 RST299 Previously unseen warning, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -218,6 +219,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.0.13 2019-12-26 - Adds ``RST218``.
 v0.0.12 2019-11-18 - Adds ``RST213`` to ``RST217``.
 v0.0.11 2019-08-07 - Configuration options to define additional directives and
                      roles (e.g. from Sphinx) for ``RST303`` and ``RST304``.

@@ -176,6 +176,7 @@ code_mapping_warning = {
     "Inline interpreted text or phrase reference start-string without end-string.": 15,
     "Multiple roles in interpreted text (both prefix and suffix present; only one allowed).": 16,  # noqa: E501
     "Mismatch: both interpreted text role suffix and reference suffix.": 17,
+    "Literal block expected; none found.": 18,
 }
 
 # Level 3 - error

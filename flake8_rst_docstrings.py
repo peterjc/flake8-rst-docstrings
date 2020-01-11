@@ -1,7 +1,7 @@
 """Check Python docstrings validate as reStructuredText (RST).
 
 This is a plugin for the tool flake8 tool for checking Python
-soucre code.
+source code.
 """
 
 import logging

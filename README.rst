@@ -3,7 +3,7 @@ flake8-rst-docstrings
 
 .. image:: https://img.shields.io/pypi/v/flake8-rst-docstrings.svg
    :alt: Released on the Python Package Index (PyPI)
-   :target: https://pypi.python.org/pypi/flake8-rst-docstrings
+   :target: https://pypi.org/project/flake8-rst-docstrings/
 .. image:: https://img.shields.io/conda/vn/conda-forge/flake8-rst-docstrings.svg
    :alt: Released on Conda
    :target: https://anaconda.org/conda-forge/flake8-rst-docstrings
@@ -22,9 +22,8 @@ Introduction
 
 This is an MIT licensed flake8 plugin for validating Python docstrings markup
 as reStructuredText (RST) using the Python library ``docutils``. It is
-available to install from the Python Package Index (PyPI):
-
-- https://pypi.python.org/pypi/flake8-rst-docstrings
+available to install from the `Python Package Index (PyPI)
+<https://pypi.org/project/flake8-rst-docstrings/>`_.
 
 This is based heavily off ``pydocstyle`` (which is also MIT licensed), which
 has a flake8 plugin called ``flake8-docstrings``, see:

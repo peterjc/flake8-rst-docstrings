@@ -24,7 +24,9 @@ setup(
     author_email="p.j.a.cock@googlemail.com",
     url="https://github.com/peterjc/flake8-rst-docstrings",
     project_urls={
-        "Documentation": "https://github.com/peterjc/flake8-rst-docstrings/blob/master/README.rst",
+        "Documentation": (
+            "https://github.com/peterjc/flake8-rst-docstrings/blob/master/README.rst"
+        ),
         "Source": "https://github.com/peterjc/flake8-rst-docstrings/",
         "Tracker": "https://github.com/peterjc/flake8-rst-docstrings/issues",
     },

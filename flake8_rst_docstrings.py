@@ -205,7 +205,7 @@ code_mappings_by_level = {
 }
 
 
-def code_mapping(level, msg, extra_directives, extra_roles, default=99):
+def code_mapping(level, msg, default=99):
     """Return an error code between 0 and 99."""
     try:
         return code_mappings_by_level[level][msg]
@@ -220,10 +220,6 @@ def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     if msg.count('"') == 2 and ' "' in msg and msg.endswith('".'):
         txt = msg[: msg.index(' "')]
         value = msg.split('"', 2)[1]
-        if txt == "Unknown directive type" and value in extra_directives:
-            return 0
-        if txt == "Unknown interpreted text role" and value in extra_roles:
-            return 0
         return code_mappings_by_level[level].get(txt, default)
     return default
 
@@ -1011,8 +1007,7 @@ class reStructuredTextChecker(object):
     @classmethod
     def parse_options(cls, options):
         """Adding black-config option."""
-        cls.extra_directives = options.rst_directives
-        cls.extra_roles = options.rst_roles
+        rstcheck.ignore_directives_and_roles(options.rst_directives, options.rst_roles)
 
     def run(self):
         """Use docutils to check docstrings are valid RST."""
@@ -1108,7 +1103,7 @@ class reStructuredTextChecker(object):
                     yield definition.start + line_number, 0, msg, type(self)
                     continue
                 msg = rst_error.split(None, 1)[1]
-                code = code_mapping(level, msg, self.extra_directives, self.extra_roles)
+                code = code_mapping(level, msg)
                 if not code:
                     # We ignored it, e.g. a known Sphinx role
                     continue

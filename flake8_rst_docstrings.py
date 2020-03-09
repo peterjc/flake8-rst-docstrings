@@ -1076,7 +1076,22 @@ class reStructuredTextChecker(object):
                 # 4 - severe  --> RST4## codes
                 #
                 # Map the string to a unique code:
-                if rst_error.startswith("(INFO/1) "):
+                if rst_error.startswith('(INFO/1) No directive entry for "'):
+                    # Upgrade level and change to old rst-lint wording
+                    level = 3
+                    rst_error = (
+                        '(ERROR/3) Unknown directive type "%s".'
+                        % rst_error.split(' "', 1)[1].split('"', 1)[0]
+                    )
+                elif rst_error.startswith('(INFO/1) No role entry for "'):
+                    # Upgrade level and change to old rst-lint wording
+                    level = 3
+                    rst_error = (
+                        '(ERROR/3) Unknown interpreted text role "%s".'
+                        % rst_error.split(' "', 1)[1].split('"', 1)[0]
+                    )
+
+                elif rst_error.startswith("(INFO/1) "):
                     level = 1
                 elif rst_error.startswith("(WARNING/2) "):
                     level = 2

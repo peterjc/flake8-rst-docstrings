@@ -257,5 +257,38 @@ class reStructuredTextChecker:
                     code += 100 * rst_error.level
                     msg = "%s%03i %s" % (rst_prefix, code, msg)
 
+                    if code == 210:
+                        if "\nArgs:\n" in docstring and docstring.find(
+                            "\nArgs:\n"
+                        ) < docstring.find("    **kwargs:"):
+                            # Ignore special case used in Google docstring style
+                            continue
+                        if "\nParameters\n----------\n" in docstring and docstring.find(
+                            "\nParameters\n----------\n"
+                        ) < docstring.find("\n**kwargs\n"):
+                            # Ignore special case used in NumPy docstring style
+                            continue
+                        if "\nParameters\n----------\n" in docstring and docstring.find(
+                            "\nParameters\n----------\n"
+                        ) < docstring.find("\n**kwargs :"):
+                            # Ignore special case used in NumPy docstring style
+                            continue
+                    elif code == 213:
+                        if "\nArgs:\n" in docstring and docstring.find(
+                            "\nArgs:\n"
+                        ) < docstring.find("    *args:"):
+                            # Ignore special case used in Google docstring style
+                            continue
+                        if "\nParameters\n----------\n" in docstring and docstring.find(
+                            "\nParameters\n----------\n"
+                        ) < docstring.find("\n*args\n"):
+                            # Ignore special case used in NumPy docstring style
+                            continue
+                        if "\nParameters\n----------\n" in docstring and docstring.find(
+                            "\nParameters\n----------\n"
+                        ) < docstring.find("\n*args :"):
+                            # Ignore special case used in NumPy docstring style
+                            continue
+
                     # We don't know the column number, leaving as zero.
                     yield start + rst_error.line, 0, msg, type(self)

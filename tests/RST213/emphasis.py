@@ -1,7 +1,7 @@
 """Print 'Hello world' to the terminal.
 
-RST uses single asterisks for **emphasis**, which is
-normally rendered as **italics**.
+RST uses single asterisks for *emphasis*, which is normally rendered as
+*italics*.
 
 Here *emphasis is missing a closing asterisk.
 

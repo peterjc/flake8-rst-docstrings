@@ -219,7 +219,6 @@ def code_mapping(level, msg, default=99):
     # ---> 'Unknown interpreted text role'
     if msg.count('"') == 2 and ' "' in msg and msg.endswith('".'):
         txt = msg[: msg.index(' "')]
-        value = msg.split('"', 2)[1]
         return code_mappings_by_level[level].get(txt, default)
     return default
 

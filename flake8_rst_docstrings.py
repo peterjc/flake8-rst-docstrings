@@ -25,8 +25,7 @@ except ImportError:
         re.VERBOSE,
     )
 
-__version__ = "0.3.0"
-
+__version__ = "0.3.1"
 
 rst_prefix = "RST"
 rst_fail_load = 900

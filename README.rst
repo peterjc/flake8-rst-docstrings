@@ -212,6 +212,18 @@ for example in your ``.flake8``, ``setup.cfg``, or ``tox.ini`` file, e.g.::
 Note that flake8 allows splitting the comma separated lists over multiple
 lines, and allows including of hash comment lines.
 
+If you are using the `Google Python Style
+<https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings>`_
+you will sometimes get unwanted warnings from this plugin - particularly in the
+argument descriptions - as it does not use strict RST. We therefore currently
+suggest ignoring some of the violation codes::
+
+    [flake8]
+    extend-ignore =
+        # Google Python style is not RST until after processed by Napoleon
+        # See https://github.com/peterjc/flake8-rst-docstrings/issues/17
+        RST203,RST301,
+
 
 Version History
 ---------------

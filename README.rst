@@ -32,10 +32,9 @@ has a flake8 plugin called ``flake8-docstrings``, see:
 - https://github.com/PyCQA/flake8-docstrings
 
 The reStructuredText (RST) validation is done by calling ``docutils`` via
-Todd Wolfson's ``restructuredtext-lint`` code:
+Steven Myint's ``rstcheck`` code:
 
-- http://docutils.sourceforge.net/
-- https://github.com/twolfson/restructuredtext-lint
+- https://github.com/myint/rstcheck
 
 I recommend you *also* install the related `flake8-docstrings
 <https://gitlab.com/pycqa/flake8-docstrings>`_ plugin, which brings
@@ -231,6 +230,8 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.1.0  *Pending*  - Switched from ``restructuredtext-lint`` to ``rstcheck``
+                     which also checks syntax of any code blocks within RST.
 v0.0.13 2019-12-26 - Adds ``RST218`` and ``RST219``.
 v0.0.12 2019-11-18 - Adds ``RST213`` to ``RST217``.
 v0.0.11 2019-08-07 - Configuration options to define additional directives and

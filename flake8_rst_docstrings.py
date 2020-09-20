@@ -18,6 +18,8 @@ except ImportError:  # Python 3.0 and later
     from io import StringIO
     from io import TextIOWrapper
 
+import rstcheck
+
 #####################################
 # Start of backported tokenize code #
 #####################################
@@ -136,10 +138,7 @@ except AttributeError:
 # End of backported tokenize code #
 ###################################
 
-import restructuredtext_lint as rst_lint
-
-
-__version__ = "0.0.13"
+__version__ = "0.1.0"
 
 
 log = logging.getLogger(__name__)
@@ -149,6 +148,7 @@ rst_fail_load = 900
 rst_fail_parse = 901
 rst_fail_all = 902
 rst_fail_lint = 903
+rst_unknown_prefix = 999
 
 # Level 1 - info
 code_mapping_info = {
@@ -205,7 +205,7 @@ code_mappings_by_level = {
 }
 
 
-def code_mapping(level, msg, extra_directives, extra_roles, default=99):
+def code_mapping(level, msg, default=99):
     """Return an error code between 0 and 99."""
     try:
         return code_mappings_by_level[level][msg]
@@ -219,11 +219,6 @@ def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     # ---> 'Unknown interpreted text role'
     if msg.count('"') == 2 and ' "' in msg and msg.endswith('".'):
         txt = msg[: msg.index(' "')]
-        value = msg.split('"', 2)[1]
-        if txt == "Unknown directive type" and value in extra_directives:
-            return 0
-        if txt == "Unknown interpreted text role" and value in extra_roles:
-            return 0
         return code_mappings_by_level[level].get(txt, default)
     return default
 
@@ -1011,8 +1006,7 @@ class reStructuredTextChecker(object):
     @classmethod
     def parse_options(cls, options):
         """Adding black-config option."""
-        cls.extra_directives = options.rst_directives
-        cls.extra_roles = options.rst_roles
+        rstcheck.ignore_directives_and_roles(options.rst_directives, options.rst_roles)
 
     def run(self):
         """Use docutils to check docstrings are valid RST."""
@@ -1054,10 +1048,9 @@ class reStructuredTextChecker(object):
                 # leading whitespace from each line - this avoids false
                 # positive severe error "Unexpected section title."
                 unindented = trim(dequote_docstring(definition.docstring))
-                # Off load RST validation to reStructuredText-lint
+                # Off load RST validation to rstcheck
                 # which calls docutils internally.
-                # TODO: Should we pass the Python filename as filepath?
-                rst_errors = list(rst_lint.lint(unindented))
+                rst_errors = list(rstcheck.check(unindented))
             except Exception as err:
                 # e.g. UnicodeDecodeError
                 msg = "%s%03i %s" % (
@@ -1067,10 +1060,7 @@ class reStructuredTextChecker(object):
                 )
                 yield definition.start, 0, msg, type(self)
                 continue
-            for rst_error in rst_errors:
-                # TODO - make this a configuration option?
-                if rst_error.level <= 1:
-                    continue
+            for line_number, rst_error in rst_errors:
                 # Levels:
                 #
                 # 0 - debug   --> we don't receive these
@@ -1080,21 +1070,50 @@ class reStructuredTextChecker(object):
                 # 4 - severe  --> RST4## codes
                 #
                 # Map the string to a unique code:
-                msg = rst_error.message.split("\n", 1)[0]
-                code = code_mapping(
-                    rst_error.level, msg, self.extra_directives, self.extra_roles
-                )
+                if rst_error.startswith('(INFO/1) No directive entry for "'):
+                    # Upgrade level and change to old rst-lint wording
+                    level = 3
+                    rst_error = (
+                        '(ERROR/3) Unknown directive type "%s".'
+                        % rst_error.split(' "', 1)[1].split('"', 1)[0]
+                    )
+                elif rst_error.startswith('(INFO/1) No role entry for "'):
+                    # Upgrade level and change to old rst-lint wording
+                    level = 3
+                    rst_error = (
+                        '(ERROR/3) Unknown interpreted text role "%s".'
+                        % rst_error.split(' "', 1)[1].split('"', 1)[0]
+                    )
+
+                elif rst_error.startswith("(INFO/1) "):
+                    level = 1
+                elif rst_error.startswith("(WARNING/2) "):
+                    level = 2
+                elif rst_error.startswith("(ERROR/3) "):
+                    level = 3
+                elif rst_error.startswith("(SEVERE/4) "):
+                    level = 4
+                else:
+                    msg = "%s%03i %s" % (
+                        rst_prefix,
+                        rst_unknown_prefix,
+                        "Unexpected prefix: %r" % rst_error,
+                    )
+                    yield definition.start + line_number, 0, msg, type(self)
+                    continue
+                msg = rst_error.split(None, 1)[1]
+                code = code_mapping(level, msg)
                 if not code:
                     # We ignored it, e.g. a known Sphinx role
                     continue
                 assert 0 < code < 100, code
-                code += 100 * rst_error.level
+                code += 100 * level
                 msg = "%s%03i %s" % (rst_prefix, code, msg)
 
                 # This will return the line number by combining the
                 # start of the docstring with the offet within it.
                 # We don't know the column number, leaving as zero.
-                yield definition.start + rst_error.line, 0, msg, type(self)
+                yield definition.start + line_number, 0, msg, type(self)
 
     def load_source(self):
         """Load the source for the specified file."""

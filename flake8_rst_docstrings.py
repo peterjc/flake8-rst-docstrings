@@ -139,7 +139,7 @@ except AttributeError:
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 
 
 log = logging.getLogger(__name__)
@@ -185,13 +185,15 @@ code_mapping_error = {
     "Unexpected indentation.": 1,
     "Malformed table.": 2,
     # e.g. Unknown directive type "req".
-    "Unknown directive type": 3,
+    'Unknown directive type "*".': 3,
     # e.g. Unknown interpreted text role "need".
-    "Unknown interpreted text role": 4,
+    'Unknown interpreted text role "*".': 4,
     # e.g. Undefined substitution referenced: "dict".
-    "Undefined substitution referenced:": 5,
+    'Undefined substitution referenced: "*".': 5,
     # e.g. Unknown target name: "license_txt".
-    "Unknown target name:": 6,
+    'Unknown target name: "*".': 6,
+    # e.g. Error in "code" directive:
+    'Error in "*" directive:': 7,
 }
 
 # Level 4 - severe
@@ -217,12 +219,12 @@ def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     # ---> 'Unknown directive type'
     # e.g. 'Unknown interpreted text role "need".'
     # ---> 'Unknown interpreted text role'
-    if msg.count('"') == 2 and ' "' in msg and msg.endswith('".'):
-        txt = msg[: msg.index(' "')]
+    if msg.count('"') == 2 and ' "' in msg:
         value = msg.split('"', 2)[1]
-        if txt == "Unknown directive type" and value in extra_directives:
+        txt = msg.replace(' "' + value + '"', ' "*"')
+        if txt == 'Unknown directive type "*".' and value in extra_directives:
             return 0
-        if txt == "Unknown interpreted text role" and value in extra_roles:
+        if txt == 'Unknown interpreted text role "*".' and value in extra_roles:
             return 0
         return code_mappings_by_level[level].get(txt, default)
     return default

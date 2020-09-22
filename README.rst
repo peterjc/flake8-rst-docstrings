@@ -120,6 +120,7 @@ RST303 Unknown directive type "XXX".
 RST304 Unknown interpreted text role "XXX".
 RST305 Undefined substitution referenced: "XXX".
 RST306 Unknown target name: "XXX".
+RST307 Error in "XXX" directive:
 RST399 Previously unseen major error, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -191,7 +192,8 @@ We assume you are familiar with `flake8 configuration
 
 If you are using Sphinx or other extensions to reStructuredText, you will
 want to define any additional directives or roles you are using to avoid
-false positive ``RST303`` and ``RST304`` violations.
+false positive ``RST303`` and ``RST304`` violations. You may also need to
+ingore ``RST307`` if using Sphinx directives with arguments.
 
 You can set these at the command line if you wish::
 
@@ -208,6 +210,9 @@ for example in your ``.flake8``, ``setup.cfg``, or ``tox.ini`` file, e.g.::
     rst-directives =
         envvar,
         exception,
+    extend-ignore =
+        RST307,
+        # ...
 
 Note that flake8 allows splitting the comma separated lists over multiple
 lines, and allows including of hash comment lines.
@@ -231,6 +236,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.0.14 2020-09-22 - Adds ``RST307`` for error in directive (eg invalid args).
 v0.0.13 2019-12-26 - Adds ``RST218`` and ``RST219``.
 v0.0.12 2019-11-18 - Adds ``RST213`` to ``RST217``.
 v0.0.11 2019-08-07 - Configuration options to define additional directives and

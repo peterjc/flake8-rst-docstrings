@@ -193,7 +193,7 @@ code_mapping_error = {
     # e.g. Unknown target name: "license_txt".
     'Unknown target name: "*".': 6,
     # e.g. Error in "code" directive:
-    'Error in "*" directive:' : 7,
+    'Error in "*" directive:': 7,
 }
 
 # Level 4 - severe

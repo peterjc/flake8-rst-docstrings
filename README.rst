@@ -212,7 +212,7 @@ for example in your ``.flake8``, ``setup.cfg``, or ``tox.ini`` file, e.g.::
         exception,
     extend-ignore =
         RST307,
-	# ...
+        # ...
 
 Note that flake8 allows splitting the comma separated lists over multiple
 lines, and allows including of hash comment lines.

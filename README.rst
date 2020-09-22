@@ -192,7 +192,8 @@ We assume you are familiar with `flake8 configuration
 
 If you are using Sphinx or other extensions to reStructuredText, you will
 want to define any additional directives or roles you are using to avoid
-false positive ``RST303`` and ``RST304`` violations.
+false positive ``RST303`` and ``RST304`` violations. You may also need to
+ingore ``RST307`` if using Sphinx directives with arguments.
 
 You can set these at the command line if you wish::
 
@@ -209,6 +210,9 @@ for example in your ``.flake8``, ``setup.cfg``, or ``tox.ini`` file, e.g.::
     rst-directives =
         envvar,
         exception,
+    extend-ignore =
+        RST307,
+	# ...
 
 Note that flake8 allows splitting the comma separated lists over multiple
 lines, and allows including of hash comment lines.

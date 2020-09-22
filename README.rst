@@ -232,7 +232,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.0.14 2020-09-20 - Adds ``RST307`` for error in directive (eg invalid args).
+v0.0.14 2020-09-22 - Adds ``RST307`` for error in directive (eg invalid args).
 v0.0.13 2019-12-26 - Adds ``RST218`` and ``RST219``.
 v0.0.12 2019-11-18 - Adds ``RST213`` to ``RST217``.
 v0.0.11 2019-08-07 - Configuration options to define additional directives and

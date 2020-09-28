@@ -227,7 +227,7 @@ suggest ignoring some of the violation codes::
     extend-ignore =
         # Google Python style is not RST until after processed by Napoleon
         # See https://github.com/peterjc/flake8-rst-docstrings/issues/17
-        RST203,RST301,
+        RST201,RST203,RST301,
 
 
 Version History

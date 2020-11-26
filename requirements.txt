@@ -6,3 +6,8 @@ flake8 >= 3.0.0
 # https://github.com/twolfson/restructuredtext-lint
 # This internally calls docutils for RST validation:
 restructuredtext_lint
+
+# docutils uses pygments for parsing code blocks
+# (and at the time of writing does not declare this
+# as a requirement):
+pygments

@@ -4,6 +4,9 @@ build
 #Ignore the distribution directory
 dist
 
+#Ignore compiled Python files
+*.pyc
+
 #Ignore another Python specific build folder:
 flake8_rst_docstrings.egg-info/
  

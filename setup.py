@@ -47,6 +47,7 @@ setup(
         "flake8 >= 3.0.0",
         "restructuredtext_lint",
         "pydocstyle >= 3.0.0",
+        "pygments",
     ],
     entry_points={
         "flake8.extension": ["RST = flake8_rst_docstrings:reStructuredTextChecker"]

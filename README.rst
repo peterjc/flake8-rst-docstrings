@@ -146,8 +146,8 @@ file in order to extract the docstrings, or in processing the contents.
 Code   Description (and notes)
 ------ -----------------------------------------------------------------------
 RST900 Failed to load file
-RST901 Failed to parse file
-RST902 Failed to parse __all__ entry (e.g. single entry as string not tuple)
+RST901 Failed to parse file (*No longer used*)
+RST902 Failed to parse __all__ entry (*No longer used*)
 RST903 Failed to lint docstring
 ====== =======================================================================
 
@@ -236,6 +236,9 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.2.0  *Pending*  - Use AST from flake8 not re-parsing with pydocstyle.
+                   - Drops ``RST901`` (internal problem with parser).
+                   - Drops ``RST902`` (checking any ``__all__`` entry).
 v0.1.2  2021-04-16 - Dropped unused logging module import.
                    - Extended test coverage.
 v0.1.1  2021-04-15 - Explicit ``pygments`` dependency for any code blocks.

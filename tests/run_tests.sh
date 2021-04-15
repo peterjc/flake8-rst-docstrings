@@ -43,8 +43,14 @@ echo "Good, no RST304 style violations reported, as expected."
 echo "========="
 echo "Help text"
 echo "========="
-flake8 -h | grep -i RST
-echo "Good, RST options appear in the help text"
+flake8 -h | grep " --rst-"
+echo "Good, RST options appear in the help text."
+
+echo "=============="
+echo "Version string"
+echo "=============="
+flake8 --version | grep "rst-docstrings: "
+echo "Good, appears in the flake8 version string."
 
 echo "============"
 echo "Tests passed"

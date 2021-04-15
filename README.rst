@@ -155,8 +155,8 @@ RST903 Failed to lint docstring (e.g. unicode encoding issue under Python 2)
 Installation and usage
 ----------------------
 
-Python 3.6 or later is recommended, but Python 2.7 and Python 3.3 onwards are
-also supported.
+Python 3.6 or later is recommended, but Python 3.3 onwards is also supported.
+Earlier versions did support Python 2.7, use v0.0.14 if required.
 
 We recommend installing the plugin using pip, which handles the dependencies::
 
@@ -237,6 +237,7 @@ Version History
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
 v0.1.0  2021-04-15 - Import the parser from ``pydocstyle`` directly.
+                   - Requires Python 3 (drops support for Python 2).
 v0.0.14 2020-09-22 - Adds ``RST307`` for error in directive (eg invalid args).
 v0.0.13 2019-12-26 - Adds ``RST218`` and ``RST219``.
 v0.0.12 2019-11-18 - Adds ``RST213`` to ``RST217``.

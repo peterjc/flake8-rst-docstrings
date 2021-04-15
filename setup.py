@@ -34,7 +34,6 @@ setup(
         "Intended Audience :: Developers",
         "Framework :: Flake8",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: MIT License",
@@ -43,6 +42,7 @@ setup(
     ],
     keywords="PEP 287, pep287, docstrings, rst, reStructuredText",
     py_modules=["flake8_rst_docstrings"],
+    python_requires=">=3.3",
     install_requires=[
         "flake8 >= 3.0.0",
         "restructuredtext_lint",

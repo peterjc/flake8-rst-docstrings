@@ -278,7 +278,7 @@ To make a new release once tested locally and on TravisCI::
     $ git tag vX.Y.Z
     $ python setup.py sdist --formats=gztar && python setup.py bdist_wheel
     $ git push origin master --tags
-    $ twine upload dist/flake8-rst-docstrings-X.Y.Z*
+    $ twine upload dist/flake8?rst?docstrings-X.Y.Z*
 
 The PyPI upload should trigger an automated pull request updating the
 `flake8-rst-docstrings conda-forge recipe

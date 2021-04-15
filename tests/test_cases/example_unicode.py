@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-u"""This module has an explicit URF-8 encoding and unicode docstring.
+u"""This module has an explicit UTF-8 encoding and unicode docstring.
 
 The following text is a short sentence in Japanese:
 

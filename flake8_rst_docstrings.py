@@ -5,136 +5,14 @@ source code.
 """
 
 import logging
-import re
 import sys
 
-import tokenize as tk
+from tokenize import open as tokenize_open
+
+from io import StringIO
+from io import TextIOWrapper
 
 from pydocstyle.parser import Parser
-
-try:
-    from StringIO import StringIO
-except ImportError:  # Python 3.0 and later
-    from io import StringIO
-    from io import TextIOWrapper
-
-#####################################
-# Start of backported tokenize code #
-#####################################
-
-# If possible (python >= 3.2) use tokenize.open to open files, so PEP 263
-# encoding markers are interpreted.
-try:
-    tokenize_open = tk.open
-except AttributeError:
-    # Fall back on a backport of the encoding aware tokenize open function,
-    # which requires we back port tokenize.detect_encoding to implement.
-    from codecs import lookup, BOM_UTF8
-    from io import open as io_open
-
-    cookie_re = re.compile(r"^[ \t\f]*#.*?coding[:=][ \t]*([-\w.]+)")
-    blank_re = re.compile(br"^[ \t\f]*(?:[#\r\n]|$)")
-
-    # I don't think 'blank regular expression' is well named, think
-    # it looks for blank line after any Python # comment removed.
-    # Key test case of interest is hashbang lines!
-    assert blank_re.match(b"\n")
-    assert blank_re.match(b"# Comment\n")
-    assert blank_re.match(b"#!/usr/bin/python\n")
-    assert blank_re.match(b"#!/usr/bin/env python\n")
-    assert not blank_re.match(b'"""Welcome\n')
-    assert not blank_re.match(b'"""Welcome"""\n')
-
-    def _get_normal_name(orig_enc):
-        """Imitates get_normal_name in tokenizer.c (PRIVATE)."""
-        # sys.stderr.write("DEBUG: _get_normal_name(%r)\n" % orig_enc)
-        # Only care about the first 12 characters.
-        enc = orig_enc[:12].lower().replace("_", "-")
-        if enc == "utf-8" or enc.startswith("utf-8-"):
-            return "utf-8"
-        if enc in ("latin-1", "iso-8859-1", "iso-latin-1") or enc.startswith(
-            ("latin-1-", "iso-8859-1-", "iso-latin-1-")
-        ):
-            return "iso-8859-1"
-        return orig_enc
-
-    def _find_cookie(line, filename, bom_found):
-        """Find encoding string in a line of Python (PRIVATE)."""
-        # sys.stderr.write("DEBUG: _find_cookie(%r, %r, %r)\n"
-        #                  % (line, filename, bom_found))
-        match = cookie_re.match(line)
-        if not match:
-            return None
-        encoding = _get_normal_name(match.group(1))
-        try:
-            lookup(encoding)
-        except LookupError:
-            # This behaviour mimics the Python interpreter
-            raise SyntaxError(
-                "unknown encoding for {!r}: {}".format(filename, encoding)
-            )
-
-        if bom_found:
-            if encoding != "utf-8":
-                # This behaviour mimics the Python interpreter
-                raise SyntaxError("encoding problem for {!r}: utf-8".format(filename))
-            encoding += "-sig"
-        return encoding
-
-    def tokenize_open(filename):
-        """Simulate opening a Python file read only with the correct encoding.
-
-        While this was based on the Python 3 standard library function
-        tokenize.open in order to backport it to Python 2.7, this proved
-        painful.
-
-        Note that because this text will later be fed into ``exex(...)`` we
-        would hit SyntaxError encoding declaration in Unicode string, so the
-        handle returned has the encoding line masked out!
-
-        Note we don't just remove the line as that would throw off the line
-        numbers, it is replaced with a Python comment.
-        """
-        # sys.stderr.write("DEBUG: tokenize_open(%r)\n" % filename)
-        # Will check the first & second lines for an encoding
-        # AND REMOVE IT FROM THE TEXT RETURNED
-        with io_open(filename, "rb") as handle:
-            lines = list(handle)
-
-        # Find the encoding
-        first = lines[0] if lines else b""
-        second = lines[1] if len(lines) > 1 else b""
-        default = "utf-8"
-        bom_found = False
-        if first.startswith(BOM_UTF8):
-            bom_found = True
-            first = first[3:]
-            default = "utf-8-sig"
-        encoding = _find_cookie(first, filename, bom_found)
-        if encoding:
-            lines[0] = "# original encoding removed\n"
-        if not encoding and blank_re.match(first):
-            # sys.stderr.write("DEBUG: Trying second line %r\n"
-            #                  % second)
-            encoding = _find_cookie(second, filename, bom_found)
-            if encoding:
-                lines[1] = "# original encoding removed\n"
-        if not encoding:
-            encoding = default
-
-        # sys.stderr.write("DEBUG: tokenize_open using encoding=%r\n"
-        #                  % encoding)
-
-        # Apply the encoding, using StringIO as we removed the
-        # original encoding to help legacy code using exec.
-        # for b in lines:
-        #     sys.stderr.write(b"DEBUG: " + b)
-        return StringIO("".join(b.decode(encoding) for b in lines))
-
-
-###################################
-# End of backported tokenize code #
-###################################
 
 import restructuredtext_lint as rst_lint
 
@@ -441,9 +319,5 @@ class reStructuredTextChecker(object):
             else:
                 self.source = TextIOWrapper(sys.stdin.buffer, errors="ignore").read()
         else:
-            # Could be a Python 2.7 StringIO with no context manager, sigh.
-            # with tokenize_open(self.filename) as fd:
-            #     self.source = fd.read()
-            handle = tokenize_open(self.filename)
-            self.source = handle.read()
-            handle.close()
+            with tokenize_open(self.filename) as fd:
+                self.source = fd.read()

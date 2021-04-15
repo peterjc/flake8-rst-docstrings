@@ -16,5 +16,8 @@ def hello_jp():
     return u"こんにちは"
 
 
+__all__ = ("hello_jp",)  # single entry tuple
+
+
 if __name__ == "__main__":
     print(hello_jp())

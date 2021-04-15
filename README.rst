@@ -147,7 +147,7 @@ Code   Description (and notes)
 ------ -----------------------------------------------------------------------
 RST900 Failed to load file (e.g. unicode encoding issue under Python 2)
 RST901 Failed to parse file
-RST902 Failed to parse __all__ entry
+RST902 Failed to parse __all__ entry (e.g. single entry as string not tuple)
 RST903 Failed to lint docstring (e.g. unicode encoding issue under Python 2)
 ====== =======================================================================
 
@@ -236,6 +236,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.1.0  2021-04-15 - Import the parser from ``pydocstyle`` directly.
 v0.0.14 2020-09-22 - Adds ``RST307`` for error in directive (eg invalid args).
 v0.0.13 2019-12-26 - Adds ``RST218`` and ``RST219``.
 v0.0.12 2019-11-18 - Adds ``RST213`` to ``RST217``.

@@ -4,25 +4,18 @@ This is a plugin for the tool flake8 tool for checking Python
 source code.
 """
 
-import sys
-
-from tokenize import open as tokenize_open
-
-from io import StringIO
-from io import TextIOWrapper
-
-from pydocstyle.parser import Parser
+import ast
 
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 
 
 rst_prefix = "RST"
 rst_fail_load = 900
-rst_fail_parse = 901
-rst_fail_all = 902
+# rst_fail_parse = 901
+# rst_fail_all = 902
 rst_fail_lint = 903
 
 # Level 1 - info
@@ -105,79 +98,63 @@ def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     return default
 
 
-####################################
-# Start of code copied from PEP257 #
-####################################
+class RstDocStringVisitor(ast.NodeVisitor):
+    """Ast visitor for RST docstring validation."""
 
-# This is the reference implementation of the alogrithm
-# in PEP257 for removing the indentation of a docstring,
-# which has been placed in the public domain.
-#
-# This includes the minor change from sys.maxint to
-# sys.maxsize for Python 3 compatibility.
-#
-# https://www.python.org/dev/peps/pep-0257/#handling-docstring-indentation
+    errors = []
 
+    def rst_validate(self, node):
+        """Validate the docstring of this node as RST."""
+        self.generic_visit(node)  # Ensure visit any children
+        docstring = ast.get_docstring(node, clean=True)
+        if not docstring:
+            # People can use flake8-docstrings to report missing docstrings
+            return
 
-def trim(docstring):
-    """PEP257 docstring indentation trim function."""
-    if not docstring:
-        return ""
-    # Convert tabs to spaces (following the normal Python rules)
-    # and split into a list of lines:
-    lines = docstring.expandtabs().splitlines()
-    # Determine minimum indentation (first line doesn't count):
-    indent = sys.maxsize
-    for line in lines[1:]:
-        stripped = line.lstrip()
-        if stripped:
-            indent = min(indent, len(line) - len(stripped))
-    # Remove indentation (first line is special):
-    trimmed = [lines[0].strip()]
-    if indent < sys.maxsize:
-        for line in lines[1:]:
-            trimmed.append(line[indent:].rstrip())
-    # Strip off trailing and leading blank lines:
-    while trimmed and not trimmed[-1]:
-        trimmed.pop()
-    while trimmed and not trimmed[0]:
-        trimmed.pop(0)
-    # Return a single string:
-    return "\n".join(trimmed)
+        start = node.body[0].lineno - len(
+            ast.get_docstring(node, clean=False).split("\n")
+        )
+        # with open("/dev/stderr", "w") as handle:
+        #      handle.write(f"DEBUG: Checking {node} from line {start}\n")
 
+        try:
+            rst_errors = list(rst_lint.lint(docstring))
+        except Exception as err:
+            # e.g. UnicodeDecodeError
+            msg = "%s%03i %s" % (
+                rst_prefix,
+                rst_fail_lint,
+                "Failed to lint docstring: %s %s\n%s"
+                % (node.name, err, repr(docstring)),
+            )
+            self.errors.append((node.body[0].lineno, msg))
+            return
 
-##################################
-# End of code copied from PEP257 #
-##################################
+        for rst_error in rst_errors:
+            # We don't know the column number
+            self.errors.append(
+                (
+                    rst_error.line + start,
+                    rst_error.level,
+                    rst_error.message,
+                )
+            )
 
+    def visit_Module(self, node: ast.Module):
+        """Visit a module in the AST."""
+        self.rst_validate(node)
 
-def dequote_docstring(text):
-    """Remove the quotes delimiting a docstring."""
-    # TODO: Process escaped characters unless raw mode?
-    text = text.strip()
-    if len(text) > 6 and text[:3] == text[-3:] == '"""':
-        # Standard case, """..."""
-        return text[3:-3]
-    if len(text) > 7 and text[:4] in ('u"""', 'r"""') and text[-3:] == '"""':
-        # Unicode, u"""...""", or raw r"""..."""
-        return text[4:-3]
-    # Other flake8 tools will report atypical quotes:
-    if len(text) > 6 and text[:3] == text[-3:] == "'''":
-        return text[3:-3]
-    if len(text) > 7 and text[:4] in ("u'''", "r'''") and text[-3:] == "'''":
-        return text[4:-3]
-    if len(text) > 2 and text[0] == text[-1] == '"':
-        return text[1:-1]
-    if len(text) > 3 and text[:2] in ('u"', 'r"') and text[-1] == '"':
-        return text[2:-1]
-    if len(text) > 2 and text[0] == text[-1] == "'":
-        return text[1:-1]
-    if len(text) > 3 and text[:2] in ("u'", "r'") and text[-1] == "'":
-        return text[2:-1]
-    raise ValueError("Bad quotes!")
+    def visit_ClassDef(self, node: ast.ClassDef):
+        """Visit a class definition in the AST."""
+        self.rst_validate(node)
 
+    def visit_FunctionDef(self, node: ast.FunctionDef):
+        """Visit a function definition in the AST."""
+        self.rst_validate(node)
 
-parse = Parser()  # from pydocstyle
+    def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef):
+        """Visit an async-function definition in the AST."""
+        self.rst_validate(node)
 
 
 class reStructuredTextChecker(object):
@@ -186,18 +163,10 @@ class reStructuredTextChecker(object):
     name = "rst-docstrings"
     version = __version__
 
-    STDIN_NAMES = {"stdin", "-", "(none)", None}
-
     def __init__(self, tree, filename="(none)"):
         """Initialise."""
         self.tree = tree
         self.filename = filename
-        try:
-            self.load_source()
-            self.err = None
-        except Exception as err:
-            self.source = None
-            self.err = err
 
     @classmethod
     def add_options(cls, parser):
@@ -227,60 +196,23 @@ class reStructuredTextChecker(object):
 
     def run(self):
         """Use docutils to check docstrings are valid RST."""
-        # Is there any reason not to call load_source here?
-        if self.err is not None:
-            assert self.source is None
+        # with open("/dev/stderr", "w") as handle:
+        #     handle.write(f"DEBUG: Checking tree of {self.filename}\n")
+        if self.tree is None:
             msg = "%s%03i %s" % (
                 rst_prefix,
                 rst_fail_load,
                 "Failed to load file: %s" % self.err,
             )
             yield 0, 0, msg, type(self)
-            module = []
-        try:
-            module = parse(StringIO(self.source), self.filename)
-        except SyntaxError as err:
-            msg = "%s%03i %s" % (
-                rst_prefix,
-                rst_fail_parse,
-                "Failed to parse file: %s" % err,
-            )
-            yield 0, 0, msg, type(self)
-            module = []
-        if module.dunder_all_error:
-            msg = "%s%03i %s" % (
-                rst_prefix,
-                rst_fail_all,
-                "Failed to parse __all__ entry.",
-            )
-            yield 0, 0, msg, type(self)
-            # module = []
-        for definition in module:
-            if not definition.docstring:
-                # People can use flake8-docstrings to report missing
-                # docstrings
-                continue
-            try:
-                # Note we use the PEP257 trim algorithm to remove the
-                # leading whitespace from each line - this avoids false
-                # positive severe error "Unexpected section title."
-                unindented = trim(dequote_docstring(definition.docstring))
-                # Off load RST validation to reStructuredText-lint
-                # which calls docutils internally.
-                # TODO: Should we pass the Python filename as filepath?
-                rst_errors = list(rst_lint.lint(unindented))
-            except Exception as err:
-                # e.g. UnicodeDecodeError
-                msg = "%s%03i %s" % (
-                    rst_prefix,
-                    rst_fail_lint,
-                    "Failed to lint docstring: %s - %s" % (definition.name, err),
-                )
-                yield definition.start, 0, msg, type(self)
-                continue
-            for rst_error in rst_errors:
+        else:
+            visitor = RstDocStringVisitor()
+            visitor.visit(self.tree)
+            # with open("/dev/stderr", "w") as handle:
+            #     handle.write(f"DEBUG: From {self.filename} found {visitor.errors}\n")
+            for line, level, msg in visitor.errors:
                 # TODO - make this a configuration option?
-                if rst_error.level <= 1:
+                if level <= 1:
                     continue
                 # Levels:
                 #
@@ -291,30 +223,14 @@ class reStructuredTextChecker(object):
                 # 4 - severe  --> RST4## codes
                 #
                 # Map the string to a unique code:
-                msg = rst_error.message.split("\n", 1)[0]
-                code = code_mapping(
-                    rst_error.level, msg, self.extra_directives, self.extra_roles
-                )
+                msg = msg.split("\n", 1)[0]
+                code = code_mapping(level, msg, self.extra_directives, self.extra_roles)
                 if not code:
                     # We ignored it, e.g. a known Sphinx role
                     continue
                 assert 0 < code < 100, code
-                code += 100 * rst_error.level
+                code += 100 * level
                 msg = "%s%03i %s" % (rst_prefix, code, msg)
 
-                # This will return the line number by combining the
-                # start of the docstring with the offet within it.
                 # We don't know the column number, leaving as zero.
-                yield definition.start + rst_error.line, 0, msg, type(self)
-
-    def load_source(self):
-        """Load the source for the specified file."""
-        if self.filename in self.STDIN_NAMES:
-            self.filename = "stdin"
-            if sys.version_info[0] < 3:
-                self.source = sys.stdin.read()
-            else:
-                self.source = TextIOWrapper(sys.stdin.buffer, errors="ignore").read()
-        else:
-            with tokenize_open(self.filename) as fd:
-                self.source = fd.read()
+                yield line, 0, msg, type(self)

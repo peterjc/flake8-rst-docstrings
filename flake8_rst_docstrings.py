@@ -657,8 +657,10 @@ class Parser(object):
             return docstring
         return None
 
-    def parse_decorators(self):  # noqa : D401
-        """Called after first @ is found.
+    def parse_decorators(self):
+        """Parse decorators into a private attribute.
+
+        Called after first @ is found.
 
         Parse decorators into self._accumulated_decorators.
         Continue to do so until encountering the 'def' or 'class' start token.

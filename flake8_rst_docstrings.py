@@ -98,65 +98,6 @@ def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     return default
 
 
-class RstDocStringVisitor(ast.NodeVisitor):
-    """Ast visitor for RST docstring validation."""
-
-    errors = []
-
-    def rst_validate(self, node):
-        """Validate the docstring of this node as RST."""
-        self.generic_visit(node)  # Ensure visit any children
-        docstring = ast.get_docstring(node, clean=True)
-        if not docstring:
-            # People can use flake8-docstrings to report missing docstrings
-            return
-
-        start = node.body[0].lineno - len(
-            ast.get_docstring(node, clean=False).split("\n")
-        )
-        # with open("/dev/stderr", "w") as handle:
-        #      handle.write(f"DEBUG: Checking {node} from line {start}\n")
-
-        try:
-            rst_errors = list(rst_lint.lint(docstring))
-        except Exception as err:
-            # e.g. UnicodeDecodeError
-            msg = "%s%03i %s" % (
-                rst_prefix,
-                rst_fail_lint,
-                "Failed to lint docstring: %s %s\n%s"
-                % (node.name, err, repr(docstring)),
-            )
-            self.errors.append((node.body[0].lineno, msg))
-            return
-
-        for rst_error in rst_errors:
-            # We don't know the column number
-            self.errors.append(
-                (
-                    rst_error.line + start,
-                    rst_error.level,
-                    rst_error.message,
-                )
-            )
-
-    def visit_Module(self, node: ast.Module):
-        """Visit a module in the AST."""
-        self.rst_validate(node)
-
-    def visit_ClassDef(self, node: ast.ClassDef):
-        """Visit a class definition in the AST."""
-        self.rst_validate(node)
-
-    def visit_FunctionDef(self, node: ast.FunctionDef):
-        """Visit a function definition in the AST."""
-        self.rst_validate(node)
-
-    def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef):
-        """Visit an async-function definition in the AST."""
-        self.rst_validate(node)
-
-
 class reStructuredTextChecker(object):
     """Checker of Python docstrings as reStructuredText."""
 
@@ -196,8 +137,6 @@ class reStructuredTextChecker(object):
 
     def run(self):
         """Use docutils to check docstrings are valid RST."""
-        # with open("/dev/stderr", "w") as handle:
-        #     handle.write(f"DEBUG: Checking tree of {self.filename}\n")
         if self.tree is None:
             msg = "%s%03i %s" % (
                 rst_prefix,
@@ -206,31 +145,62 @@ class reStructuredTextChecker(object):
             )
             yield 0, 0, msg, type(self)
         else:
-            visitor = RstDocStringVisitor()
-            visitor.visit(self.tree)
-            # with open("/dev/stderr", "w") as handle:
-            #     handle.write(f"DEBUG: From {self.filename} found {visitor.errors}\n")
-            for line, level, msg in visitor.errors:
-                # TODO - make this a configuration option?
-                if level <= 1:
+            try:
+                wanted = (
+                    ast.Module,
+                    ast.ClassDef,
+                    ast.FunctionDef,
+                    ast.AsyncFunctionDef,
+                )
+            except AttributeError:
+                # Python 3.3 and 3.4 lacked ast.AsyncFunctionDef
+                wanted = (ast.Module, ast.ClassDef, ast.FunctionDef)
+            for node in ast.walk(self.tree):
+                if not isinstance(node, wanted):
                     continue
-                # Levels:
-                #
-                # 0 - debug   --> we don't receive these
-                # 1 - info    --> RST1## codes
-                # 2 - warning --> RST2## codes
-                # 3 - error   --> RST3## codes
-                # 4 - severe  --> RST4## codes
-                #
-                # Map the string to a unique code:
-                msg = msg.split("\n", 1)[0]
-                code = code_mapping(level, msg, self.extra_directives, self.extra_roles)
-                if not code:
-                    # We ignored it, e.g. a known Sphinx role
+                docstring = ast.get_docstring(node, clean=True)
+                if not docstring:
+                    # People can use flake8-docstrings to report missing docstrings
                     continue
-                assert 0 < code < 100, code
-                code += 100 * level
-                msg = "%s%03i %s" % (rst_prefix, code, msg)
+                start = node.body[0].lineno - len(
+                    ast.get_docstring(node, clean=False).split("\n")
+                )
+                try:
+                    rst_errors = list(rst_lint.lint(docstring))
+                except Exception as err:
+                    # e.g. UnicodeDecodeError
+                    msg = "%s%03i %s" % (
+                        rst_prefix,
+                        rst_fail_lint,
+                        "Failed to lint docstring: %s %s\n%s"
+                        % (node.name, err, repr(docstring)),
+                    )
+                    self.errors.append((node.body[0].lineno, msg))
+                    continue
 
-                # We don't know the column number, leaving as zero.
-                yield line, 0, msg, type(self)
+                for rst_error in rst_errors:
+                    # TODO - make this a configuration option?
+                    if rst_error.level <= 1:
+                        continue
+                    # Levels:
+                    #
+                    # 0 - debug   --> we don't receive these
+                    # 1 - info    --> RST1## codes
+                    # 2 - warning --> RST2## codes
+                    # 3 - error   --> RST3## codes
+                    # 4 - severe  --> RST4## codes
+                    #
+                    # Map the string to a unique code:
+                    msg = rst_error.message.split("\n", 1)[0]
+                    code = code_mapping(
+                        rst_error.level, msg, self.extra_directives, self.extra_roles
+                    )
+                    if not code:
+                        # We ignored it, e.g. a known Sphinx role
+                        continue
+                    assert 0 < code < 100, code
+                    code += 100 * rst_error.level
+                    msg = "%s%03i %s" % (rst_prefix, code, msg)
+
+                    # We don't know the column number, leaving as zero.
+                    yield start + rst_error.line, 0, msg, type(self)

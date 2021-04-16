@@ -162,9 +162,6 @@ class reStructuredTextChecker(object):
                 if not docstring:
                     # People can use flake8-docstrings to report missing docstrings
                     continue
-                start = node.body[0].lineno - len(
-                    ast.get_docstring(node, clean=False).split("\n")
-                )
                 try:
                     rst_errors = list(rst_lint.lint(docstring))
                 except Exception as err:
@@ -172,11 +169,15 @@ class reStructuredTextChecker(object):
                     msg = "%s%03i %s" % (
                         rst_prefix,
                         rst_fail_lint,
-                        "Failed to lint docstring: %s %s\n%s"
-                        % (node.name, err, repr(docstring)),
+                        "Failed to lint docstring: %s - %s" % (node.name, err),
                     )
                     self.errors.append((node.body[0].lineno, msg))
                     continue
+
+                if rst_errors:
+                    start = node.body[0].lineno - len(
+                        ast.get_docstring(node, clean=False).split("\n")
+                    )
 
                 for rst_error in rst_errors:
                     # TODO - make this a configuration option?

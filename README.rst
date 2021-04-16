@@ -145,10 +145,10 @@ file in order to extract the docstrings, or in processing the contents.
 ====== =======================================================================
 Code   Description (and notes)
 ------ -----------------------------------------------------------------------
-RST900 Failed to load file (e.g. unicode encoding issue under Python 2)
+RST900 Failed to load file
 RST901 Failed to parse file
 RST902 Failed to parse __all__ entry (e.g. single entry as string not tuple)
-RST903 Failed to lint docstring (e.g. unicode encoding issue under Python 2)
+RST903 Failed to lint docstring
 ====== =======================================================================
 
 
@@ -236,6 +236,8 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.1.2  2021-04-16 - Dropped unused logging module import.
+                   - Extended test coverage.
 v0.1.1  2021-04-15 - Explicit ``pygments`` dependency for any code blocks.
 v0.1.0  2021-04-15 - Import the parser from ``pydocstyle`` directly.
                    - Requires Python 3 (drops support for Python 2).

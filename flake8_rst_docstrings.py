@@ -16,7 +16,7 @@ from pydocstyle.parser import Parser
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 
 rst_prefix = "RST"

@@ -4,11 +4,10 @@
 It works fine using the Windows-1252 or iso-8859-1 encoding,
 but not using UTF-8 which is the Python default.
 
-RST docstring validation is expected to fail:
+RST docstring validation is expected to pass:
 
-
-    $ flake8 --select RST RST903/not_utf8.py
-    XXX
+    $ flake8 --select RST test_cases/not_utf8.py
+    (no errors)
 
 """
 
@@ -19,7 +18,7 @@ class Name:
     def __init__(self, first, last):
         """Initialize name instance.
 
-        >>> fred = Name("Frédéric", "François")
+        >>> fred = Name("FrÃ©dÃ©ric", "FranÃ§ois")
         >>> print(fred)
         """
         self.first = first

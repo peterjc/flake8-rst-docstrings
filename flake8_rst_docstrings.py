@@ -4,7 +4,6 @@ This is a plugin for the tool flake8 tool for checking Python
 source code.
 """
 
-import logging
 import sys
 
 from tokenize import open as tokenize_open
@@ -19,8 +18,6 @@ import restructuredtext_lint as rst_lint
 
 __version__ = "0.1.1"
 
-
-log = logging.getLogger(__name__)
 
 rst_prefix = "RST"
 rst_fail_load = 900

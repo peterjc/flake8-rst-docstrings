@@ -283,12 +283,3 @@ To make a new release once tested locally and on TravisCI::
 The PyPI upload should trigger an automated pull request updating the
 `flake8-rst-docstrings conda-forge recipe
 <https://github.com/conda-forge/flake8-rst-docstrings-feedstock/blob/master/recipe/meta.yaml>`_.
-
-
-TODO
-----
-
-- Have the "INFO" level ``RST1##`` codes available but ignored by default?
-- Can we call ``docutils`` rather than bundle a copy of their parser code?
-- Create a full test suite and use this for continuous integration.
-- Test with raw mode docstrings and slash-escaped characters.

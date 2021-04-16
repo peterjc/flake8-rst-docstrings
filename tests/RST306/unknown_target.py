@@ -11,7 +11,7 @@ docstring fragment - it could be in an included footer?
 Here a missing-link_ hyperlink is used, so this docstring in
 isolation should fail validation::
 
-    $ flake8 --select RST  RST306/unknown_target.py 
+    $ flake8 --select RST  RST306/unknown_target.py
     RST306/unknown_target.py:12:1: RST306 Unknown target name: "missing-link".
 
 """

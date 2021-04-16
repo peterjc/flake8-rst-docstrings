@@ -12,6 +12,6 @@ instead (wrapping in backticks as a inline literal).
 
 Better, escape the opening pipe as \|000...00>
 instead.
-"""
+"""  # noqa: E501
 
 print("Hello world")

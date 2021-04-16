@@ -12,6 +12,6 @@ an error and should fail validation:
     $ flake8 --select RST RST216/roles.py
     RST216/roles.py:10:1: RST216 Multiple roles in interpreted text (both prefix and suffix present; only one allowed).
 
-"""
+"""  # noqa: E501
 
 print("Hello world")

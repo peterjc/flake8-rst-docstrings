@@ -3,11 +3,12 @@
 This is expected to fail validation:
 
     $ flake8 --select RST RST203/def_list.py
-    RST203/def_list.py:18:1: RST203 Definition list ends without a blank line; unexpected unindent.
+    RST203/def_list.py:19:1: RST203 Definition list ends without a blank line; unexpected unindent.
 
 In this case, the four parameters should all have their own ``:parameter``
 opening.
-"""
+"""  # noqa: E501
+
 
 def box(x1, y1, width=500, hieght=100):
     """Draw a box.
@@ -20,4 +21,3 @@ def box(x1, y1, width=500, hieght=100):
     :return: Graphics object
     """
     pass
-

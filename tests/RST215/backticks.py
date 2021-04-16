@@ -10,6 +10,6 @@ That is considered to be an error, and should fail::
     $ flake8 --select RST RST215/backticks.py
     RST215/backticks.py:7:1: RST215 Inline interpreted text or phrase reference start-string without end-string.
 
-"""
+"""  # noqa: E501
 
 print("Hello world")

@@ -117,15 +117,13 @@ def validate_rst(text, extra_directives=(), extra_roles=()):
                 if (
                     msg.startswith('Unknown directive type "')
                     and value in extra_directives
-                ):
-                    continue
-                if (
+                ) or (
                     msg.startswith('Unknown interpreted text role "')
                     and value in extra_roles
                 ):
                     continue
                 code = 300 + code_mapping_error.get(
-                    msg.replace(' "' + value + '"', ' "*"'), 99
+                    msg.replace(' "%s"' % value, ' "*"'), 99
                 )
             else:
                 code = 300 + code_mapping_error.get(msg, 99)

@@ -236,7 +236,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.2.0  *Pending*  - Use AST from flake8 not re-parsing with pydocstyle.
+v0.2.0  2021-04-23 - Use AST from flake8, not re-parsing with pydocstyle.
                    - Drops ``RST901`` (internal problem with parser).
                    - Drops ``RST902`` (checking any ``__all__`` entry).
 v0.1.2  2021-04-16 - Dropped unused logging module import.

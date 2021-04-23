@@ -171,12 +171,12 @@ class reStructuredTextChecker(object):
                         rst_fail_lint,
                         "Failed to lint docstring: %s - %s" % (node.name, err),
                     )
-                    self.errors.append((node.body[0].lineno, msg))
+                    yield 0, 0, msg, type(self)
                     continue
 
                 if rst_errors:
                     start = node.body[0].lineno - len(
-                        ast.get_docstring(node, clean=False).split("\n")
+                        ast.get_docstring(node, clean=False).splitlines()
                     )
 
                 for rst_error in rst_errors:

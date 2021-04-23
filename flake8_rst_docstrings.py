@@ -9,7 +9,7 @@ import ast
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 
 rst_prefix = "RST"

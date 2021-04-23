@@ -146,7 +146,7 @@ file in order to extract the docstrings, or in processing the contents.
 Code   Description (and notes)
 ------ -----------------------------------------------------------------------
 RST900 Failed to load file
-RST901 Failed to parse file (*No longer used*)
+RST901 Failed to parse docutils message (please report an issue)
 RST902 Failed to parse __all__ entry (*No longer used*)
 RST903 Failed to lint docstring
 ====== =======================================================================
@@ -236,6 +236,8 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.3.0  *Pending*  - Call docutils directly, drop rst-lint dependency.
+                   - Using ``RST901`` again, if can't parse docutils message
 v0.2.1  2021-04-23 - Minor internal style change.
 v0.2.0  2021-04-23 - Use AST from flake8, not re-parsing with pydocstyle.
                    - Drops ``RST901`` (internal problem with parser).

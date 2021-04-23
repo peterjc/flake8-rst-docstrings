@@ -16,7 +16,7 @@ __version__ = "0.3.0"
 
 rst_prefix = "RST"
 rst_fail_load = 900
-# rst_fail_parse = 901
+rst_fail_parse = 901
 # rst_fail_all = 902
 rst_fail_lint = 903
 
@@ -130,8 +130,8 @@ def validate_rst(text, extra_directives=(), extra_roles=()):
         elif level == "(SEVERE/4)":
             code = 400 + code_mapping_severe.get(msg, 99)
         else:
-            # Error?
-            continue
+            code = rst_fail_parse
+            msg = "Failed to parse docutils message: " + msg
         yield line, "%s%03i %s" % (rst_prefix, code, msg)
 
 

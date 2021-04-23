@@ -29,6 +29,16 @@ to trigger RST303.
 .. needfilter::
    :tags: example
    :layout: table
+
+This will fail validation unless the directives are ignored:
+
+    $ flake8 RST303/sphinx-directives.py
+    RST303/sphinx-directives.py:9:1: RST303 Unknown directive type "req".
+    RST303/sphinx-directives.py:16:1: RST303 Unknown directive type "spec".
+    RST303/sphinx-directives.py:29:1: RST303 Unknown directive type "needfilter".
+
+The directives can be ignored at the command line or via the
+flake8 configuration file.
 """
 
 print("sphinx-needs defines its own reStructuredText directives.")

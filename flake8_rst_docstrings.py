@@ -5,11 +5,13 @@ source code.
 """
 
 import ast
+import io
 
-import restructuredtext_lint as rst_lint
+import docutils.core
+import docutils.utils
 
 
-__version__ = "0.2.1"
+__version__ = "0.3.0"
 
 
 rst_prefix = "RST"
@@ -67,35 +69,78 @@ code_mapping_error = {
 # Level 4 - severe
 code_mapping_severe = {"Unexpected section title.": 1}
 
-code_mappings_by_level = {
-    1: code_mapping_info,
-    2: code_mapping_warning,
-    3: code_mapping_error,
-    4: code_mapping_severe,
-}
 
-
-def code_mapping(level, msg, extra_directives, extra_roles, default=99):
-    """Return an error code between 0 and 99."""
+def validate_rst(text, extra_directives=(), extra_roles=()):
+    """Return list of any RST violations from docutils."""
+    handle = io.StringIO()
     try:
-        return code_mappings_by_level[level][msg]
-    except KeyError:
+        docutils.core.publish_string(
+            text,
+            # source_path="example.py",
+            settings_overrides={
+                "report_level": docutils.utils.Reporter.INFO_LEVEL,
+                "warning_stream": handle,
+            },
+        )
+    except docutils.utils.SystemMessage:
         pass
-    # Following assumes any variable messages take the format
-    # of 'Fixed text "variable text".' only:
-    # e.g. 'Unknown directive type "req".'
-    # ---> 'Unknown directive type'
-    # e.g. 'Unknown interpreted text role "need".'
-    # ---> 'Unknown interpreted text role'
-    if msg.count('"') == 2 and ' "' in msg:
-        value = msg.split('"', 2)[1]
-        txt = msg.replace(' "' + value + '"', ' "*"')
-        if txt == 'Unknown directive type "*".' and value in extra_directives:
-            return 0
-        if txt == 'Unknown interpreted text role "*".' and value in extra_roles:
-            return 0
-        return code_mappings_by_level[level].get(txt, default)
-    return default
+    for msg in handle.getvalue().splitlines():
+        if not msg.startswith("<string>:"):
+            # Ignore continuations of multi-line messages, e.g.
+            #
+            # example.py:2: (INFO/1) Possible title underline, too short for the title.
+            # Treating it as ordinary text because it's so short.
+            # example.py:4: (WARNING/2) Inline emphasis start-string without end-string
+            #
+            # where the filename is just <string> if omitted.
+            continue
+        _, line, msg = msg.split(":", 2)
+        line = int(line)
+        level, msg = msg.strip().split(" ", 1)
+        if level == "(INFO/1)":
+            if msg.startswith(('No directive entry for "', 'No role entry for "')):
+                # Ignore, should also be an (ERROR/3) Unknown directive type
+                # or (ERROR/3) Unknown interpreted text role
+                continue
+            code = 100 + code_mapping_info.get(msg, 99)
+        elif level == "(WARNING/2)":
+            code = 200 + code_mapping_warning.get(msg, 99)
+        elif level == "(ERROR/3)":
+            if msg.count('"') == 2 and ' "' in msg:
+                # Following assumes any variable messages take the format
+                # of 'Fixed text "variable text".' only:
+                # e.g. 'Undefined substitution referenced: "dict".'
+                # ---> 'Undefined substitution referenced: "*".'
+                # e.g. 'Error in "code" directive:'
+                # ---> 'Error in "*" directive:'
+                value = msg.split('"', 2)[1]
+                if (
+                    msg.startswith('Unknown directive type "')
+                    and value in extra_directives
+                ):
+                    continue
+                if (
+                    msg.startswith('Unknown interpreted text role "')
+                    and value in extra_roles
+                ):
+                    continue
+                code = 300 + code_mapping_error.get(
+                    msg.replace(' "' + value + '"', ' "*"'), 99
+                )
+            else:
+                code = 300 + code_mapping_error.get(msg, 99)
+        elif level == "(SEVERE/4)":
+            code = 400 + code_mapping_severe.get(msg, 99)
+        else:
+            # Error?
+            continue
+        yield line, "%s%03i %s" % (rst_prefix, code, msg)
+
+
+assert list(validate_rst("Hello\n===\n\n*Bye!\n")) == [
+    (2, "RST101 Possible title underline, too short for the title."),
+    (4, "RST213 Inline emphasis start-string without end-string."),
+]
 
 
 class reStructuredTextChecker(object):
@@ -163,9 +208,11 @@ class reStructuredTextChecker(object):
                     # People can use flake8-docstrings to report missing docstrings
                     continue
                 try:
-                    rst_errors = list(rst_lint.lint(docstring))
+                    rst_errors = list(
+                        validate_rst(docstring, self.extra_directives, self.extra_roles)
+                    )
                 except Exception as err:
-                    # e.g. UnicodeDecodeError
+                    # e.g. UnicodeDecodeError?
                     msg = "%s%03i %s" % (
                         rst_prefix,
                         rst_fail_lint,
@@ -179,29 +226,6 @@ class reStructuredTextChecker(object):
                         ast.get_docstring(node, clean=False).splitlines()
                     )
 
-                for rst_error in rst_errors:
-                    # TODO - make this a configuration option?
-                    if rst_error.level <= 1:
-                        continue
-                    # Levels:
-                    #
-                    # 0 - debug   --> we don't receive these
-                    # 1 - info    --> RST1## codes
-                    # 2 - warning --> RST2## codes
-                    # 3 - error   --> RST3## codes
-                    # 4 - severe  --> RST4## codes
-                    #
-                    # Map the string to a unique code:
-                    msg = rst_error.message.split("\n", 1)[0]
-                    code = code_mapping(
-                        rst_error.level, msg, self.extra_directives, self.extra_roles
-                    )
-                    if not code:
-                        # We ignored it, e.g. a known Sphinx role
-                        continue
-                    assert 0 < code < 100, code
-                    code += 100 * rst_error.level
-                    msg = "%s%03i %s" % (rst_prefix, code, msg)
-
+                for line, msg in rst_errors:
                     # We don't know the column number, leaving as zero.
-                    yield start + rst_error.line, 0, msg, type(self)
+                    yield start + line, 0, msg, type(self)

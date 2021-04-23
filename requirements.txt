@@ -2,10 +2,8 @@
 # Our prefixes are not single letter, so we need v3:
 flake8 >= 3.0.0
 
-# We use restructuredtext-lint via its Python API,
-# https://github.com/twolfson/restructuredtext-lint
-# This internally calls docutils for RST validation:
-restructuredtext_lint
+# We use docutils for RST validation:
+docutils
 
 # docutils uses pygments for parsing code blocks
 # (and at the time of writing does not declare this

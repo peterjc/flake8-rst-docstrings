@@ -45,7 +45,7 @@ setup(
     python_requires=">=3.3",
     install_requires=[
         "flake8 >= 3.0.0",
-        "restructuredtext_lint",
+        "docutils",
         "pygments",
     ],
     entry_points={

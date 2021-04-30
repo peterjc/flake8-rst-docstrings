@@ -175,10 +175,23 @@ class reStructuredTextChecker(object):
                     continue
 
                 if rst_errors:
-                    start = node.body[0].lineno - len(
-                        ast.get_docstring(node, clean=False).splitlines()
+                    try:
+                        node.body[0].end_lineno
+                        # Worked, on Python 3.8+ and can trust the start
+                        start = node.body[0].lineno - 1  # AST value 1 based
+                    except AttributeError:
+                        # On Python 3.7 or older, and must compute start line
+                        start = node.body[0].lineno - len(
+                            ast.get_docstring(node, clean=False).splitlines()
+                        )
+                        if isinstance(node, ast.Module):
+                            start -= 1  # Why?
+                    assert (
+                        node.body[0].lineno >= 1 and start >= 0
+                    ), "Bad start line, node line number %i for: %s\n" % (
+                        node.body[0].lineno,
+                        docstring,
                     )
-
                 for rst_error in rst_errors:
                     # TODO - make this a configuration option?
                     if rst_error.level <= 1:

@@ -49,7 +49,7 @@ echo "Good, RST options appear in the help text."
 echo "=============="
 echo "Version string"
 echo "=============="
-flake8 --version | grep "rst-docstrings: "
+flake8 --version | grep "rst-docstrings:"
 echo "Good, appears in the flake8 version string."
 
 echo "============"

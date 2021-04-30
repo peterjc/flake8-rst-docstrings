@@ -10,7 +10,7 @@ However, trailing underscores have special meaning for referencing, thus
 `code`:example:_ is considered to be an error:
 
     $ flake8 --select RST RST217/roles.py
-    RST217/roles.py:10:1: RST17 Mismatch: both interpreted text role suffix and reference suffix.
+    RST217/roles.py:9:1: RST17 Mismatch: both interpreted text role suffix and reference suffix.
 
 """  # noqa: E501
 

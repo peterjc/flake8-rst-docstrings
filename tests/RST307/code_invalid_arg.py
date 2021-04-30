@@ -35,9 +35,9 @@ And:
 Sadly docutils considers all three examples to be invalid:
 
     $ flake8 --select RST  RST307/code_invalid_arg.py
-    RST307/code_invalid_arg.py:14:1: RST307 Error in "code" directive
-    RST307/code_invalid_arg.py:23:1: RST307 Error in "code-block" directive:
-    RST307/code_invalid_arg.py:31:1: RST307 Error in "code-block" directive:
+    RST307/code_invalid_arg.py:13:1: RST307 Error in "code" directive
+    RST307/code_invalid_arg.py:22:1: RST307 Error in "code-block" directive:
+    RST307/code_invalid_arg.py:30:1: RST307 Error in "code-block" directive:
 
 """
 

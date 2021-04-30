@@ -8,7 +8,7 @@ Here `example is missing a closing backtick.
 That is considered to be an error, and should fail::
 
     $ flake8 --select RST RST215/backticks.py
-    RST215/backticks.py:7:1: RST215 Inline interpreted text or phrase reference start-string without end-string.
+    RST215/backticks.py:6:1: RST215 Inline interpreted text or phrase reference start-string without end-string.
 
 """  # noqa: E501
 

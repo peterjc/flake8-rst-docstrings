@@ -12,7 +12,7 @@ Here the |bar| substituion definition is missing, so this
 docstring in isolation should fail validation::
 
     $ flake8 --select RST RST305/substitution.py
-    RST305/subsitution.py:12:1: RST305 Undefined substitution referenced: "bar"
+    RST305/subsitution.py:11:1: RST305 Undefined substitution referenced: "bar"
 
 """
 

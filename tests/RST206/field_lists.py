@@ -21,7 +21,7 @@ Because the line above is not indented or separated from
 the field list by a blank line, it is not valid RST:
 
     $ flake8 --select RST RST206/fields_list.py
-    RST206/field_lists.py:19:1: RST206 Field list ends without a blank line; unexpected unindent.
+    RST206/field_lists.py:18:1: RST206 Field list ends without a blank line; unexpected unindent.
 
 The end.
 """  # noqa: E501

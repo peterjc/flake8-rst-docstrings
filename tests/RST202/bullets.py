@@ -9,7 +9,7 @@ Other fruit.
 It should therefore fail RST validation::
 
     $ flake8 --select RST RST202/bullets.py
-    RST202/bullets.py:8:1: RST202 Bullet list ends without a blank line; unexpected unindent.
+    RST202/bullets.py:7:1: RST202 Bullet list ends without a blank line; unexpected unindent.
     RST202/bullets.py:38:1: RST202 Bullet list ends without a blank line; unexpected unindent.
 
 The end.

@@ -12,7 +12,7 @@ Here a missing-link_ hyperlink is used, so this docstring in
 isolation should fail validation::
 
     $ flake8 --select RST  RST306/unknown_target.py
-    RST306/unknown_target.py:12:1: RST306 Unknown target name: "missing-link".
+    RST306/unknown_target.py:11:1: RST306 Unknown target name: "missing-link".
 
 """
 

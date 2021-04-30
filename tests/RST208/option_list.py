@@ -29,7 +29,7 @@ There ought to be a blank line before that final comment,
 there isn't so this fails validation:
 
     $ flake8 --select RST RST208/option_list.py
-    RST208/option_list.py:27:1: RST208 Option list ends without a blank line; unexpected unindent.
+    RST208/option_list.py:26:1: RST208 Option list ends without a blank line; unexpected unindent.
 
 The end.
 """  # noqa: E501

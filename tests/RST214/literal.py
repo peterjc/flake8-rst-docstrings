@@ -8,7 +8,7 @@ Here ``literal is missing the closing backticks.
 That is considered to be an error, and should fail::
 
     $ flake8 --select RST RST214/literal.py
-    RST214/literal.py:7:1: RST214 Inline emphasis start-string without end-string.
+    RST214/literal.py:6:1: RST214 Inline emphasis start-string without end-string.
 
 """
 

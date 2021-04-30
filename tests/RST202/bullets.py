@@ -10,13 +10,22 @@ It should therefore fail RST validation::
 
     $ flake8 --select RST RST202/bullets.py
     RST202/bullets.py:8:1: RST202 Bullet list ends without a blank line; unexpected unindent.
-    RST202/bullets.py:29:1: RST202 Bullet list ends without a blank line; unexpected unindent.
+    RST202/bullets.py:38:1: RST202 Bullet list ends without a blank line; unexpected unindent.
 
 The end.
 """  # noqa: E501
 
 
-class Example:
+class Base:
+    """Meaningless base class."""
+
+    pass
+
+
+class Example(
+    dict,  # comment to stop black squeezing the class statement into one line
+    Base,  # meaningless multiple-subclassing to trigger multi-line statement
+):
     """Meaningless class."""
 
     def method(self):

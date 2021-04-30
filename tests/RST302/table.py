@@ -3,14 +3,23 @@
 This file should fail RST validation:
 
     $ flake8 --select RST RST302/table.py
-    RST302/table.py:18:1: RST302 Malformed table.
-    RST302/table.py:36:1: RST302 Malformed table.
+    RST302/table.py:27:1: RST302 Malformed table.
+    RST302/table.py:45:1: RST302 Malformed table.
 
 See below.
 """  # noqa: E510
 
 
-def simple_table(data):
+# Deliberately has lots of arguments to be a multi-line statement:
+def simple_table(
+    data,
+    alignment="left",
+    col_gap=1,
+    line_top="=",
+    line_middle="-",
+    line_bottom="=",
+    title_case=False,
+):
     """Print a simple RST table.
 
     Sample output:

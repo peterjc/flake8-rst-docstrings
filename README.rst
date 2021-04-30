@@ -236,6 +236,8 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.2.2  2021-04-30 - Fixed line number problem under Python 3.8 or later.
+                   - Corrected off-by-one line number in module docstrings.
 v0.2.1  2021-04-23 - Minor internal style change.
 v0.2.0  2021-04-23 - Use AST from flake8, not re-parsing with pydocstyle.
                    - Drops ``RST901`` (internal problem with parser).

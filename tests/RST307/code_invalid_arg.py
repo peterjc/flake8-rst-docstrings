@@ -1,6 +1,6 @@
 """Print 'Hello world' to the terminal.
 
-This is a code block with not arguments other
+This is a code block with no arguments other
 than the format:
 
 .. code:: pycon

@@ -236,6 +236,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.2.3  2021-05-03 - Fixed line number assert in one-line docstring-only file.
 v0.2.2  2021-04-30 - Fixed line number problem under Python 3.8 or later.
                    - Corrected off-by-one line number in module docstrings.
 v0.2.1  2021-04-23 - Minor internal style change.

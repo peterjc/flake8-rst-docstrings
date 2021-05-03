@@ -9,7 +9,7 @@ import ast
 import restructuredtext_lint as rst_lint
 
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 
 rst_prefix = "RST"
@@ -184,7 +184,7 @@ class reStructuredTextChecker(object):
                         start = node.body[0].lineno - len(
                             ast.get_docstring(node, clean=False).splitlines()
                         )
-                        if isinstance(node, ast.Module):
+                        if isinstance(node, ast.Module) and start > 1:
                             start -= 1  # Why?
                     assert (
                         node.body[0].lineno >= 1 and start >= 0

@@ -1,0 +1,54 @@
+name: test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include: 
+          - python-version: 3.4
+          - python-version: 3.5
+          - python-version: 3.6
+          - python-version: 3.7
+          - python-version: 3.8
+          - python-version: 3.9
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        if grep '\t' *.py *.rst; then
+            echo 'Tabs are bad, please use four spaces.';
+            false;
+        fi
+        if grep -n -r '[[:blank:]]$' *.py *.rst; then
+            echo 'Please remove trailing whitespace.'; false;
+        fi
+        pip install --upgrade pip setuptools
+        pip install flake8 flake8-docstrings restructuredtext-lint
+        if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then
+            pip install flake8-black;
+        fi
+        echo "Using restructuredtext-lint to check documentation"
+        restructuredtext-lint *.rst
+        echo "Using flake8 to check Python code"
+        flake8 setup.py flake8_rst_docstrings.py
+    - name: Install package
+      run: |
+        python setup.py install
+    - name: Run tests
+      run: |
+        echo "On this machine \$LANG=$LANG"
+        echo "Checking our own docstrings are valid RST"
+        flake8 --select RST setup.py flake8_rst_docstrings.py
+        cd tests/
+        ./run_tests.sh

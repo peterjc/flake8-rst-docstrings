@@ -7,6 +7,9 @@ flake8-rst-docstrings
 .. image:: https://img.shields.io/conda/vn/conda-forge/flake8-rst-docstrings.svg
    :alt: Released on Conda
    :target: https://anaconda.org/conda-forge/flake8-rst-docstrings
+.. image:: https://results.pre-commit.ci/badge/github/peterjc/flake8-rst-docstrings/master.svg
+   :target: https://results.pre-commit.ci/latest/github/peterjc/flake8-rst-docstrings/master
+   :alt: pre-commit.ci status
 .. image:: https://img.shields.io/travis/peterjc/flake8-rst-docstrings/master.svg
    :alt: Testing with TravisCI
    :target: https://travis-ci.org/peterjc/flake8-rst-docstrings/branches

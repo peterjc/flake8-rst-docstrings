@@ -8,6 +8,8 @@ This file should fail RST validation:
 
 See below.
 """  # noqa: E510
+
+
 # Deliberately has lots of arguments to be a multi-line statement:
 def simple_table(
     data,

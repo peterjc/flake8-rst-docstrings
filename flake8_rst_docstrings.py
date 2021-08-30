@@ -97,7 +97,7 @@ def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     return default
 
 
-class reStructuredTextChecker(object):
+class reStructuredTextChecker:
     """Checker of Python docstrings as reStructuredText."""
 
     name = "rst-docstrings"

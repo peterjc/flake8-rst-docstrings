@@ -33,7 +33,6 @@ there isn't so this fails validation:
 
 The end.
 """  # noqa: E501
-
 import sys
 
 print("Called with %i command line arguments" % (len(sys.argv) - 1))

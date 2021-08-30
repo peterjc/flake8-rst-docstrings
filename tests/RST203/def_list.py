@@ -10,7 +10,7 @@ opening.
 """  # noqa: E501
 
 
-def box(x1, y1, width=500, hieght=100):
+def box(x1, y1, width=500, height=100):
     """Draw a box.
 
     :parameter

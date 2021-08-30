@@ -20,7 +20,7 @@ def function(args):
       Gamma
     and so on to Omega.
 
-    That line about Omega should be indented for preceeded
+    That line about Omega should be indented or preceded
     by a blank line.
     """
     pass

@@ -1,7 +1,6 @@
 """Setup file for building/installing flake8-rst-docstrings."""
-
-from __future__ import with_statement
 from __future__ import print_function
+from __future__ import with_statement
 
 from setuptools import setup
 

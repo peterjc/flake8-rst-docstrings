@@ -23,7 +23,7 @@ documentation:
    :caption: this.py
    :name: this-py
 
-   print 'Explicit is better than implicit.'
+   print "Explicit is better than implicit."
 
 And:
 

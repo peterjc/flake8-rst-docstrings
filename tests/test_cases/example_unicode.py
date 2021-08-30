@@ -7,7 +7,6 @@ The following text is a short sentence in Japanese:
 
 Japanese has hiragana, katakana, and kanji.
 """
-
 from __future__ import print_function
 
 

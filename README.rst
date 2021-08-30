@@ -135,7 +135,7 @@ RST499 Previously unseen severe error, not yet assigned a unique code.
 
 Codes ending ``99``, for example ``RST499``, indicate a previously unseen
 validation error for which we have yet to assign a unique validation code
-in the assocated range, which would be ``RST4##`` in this example. If you see
+in the associated range, which would be ``RST4##`` in this example. If you see
 one of these codes, please report it on our GitHub issue tracker, ideally with
 an example we can use for testing.
 
@@ -193,7 +193,7 @@ We assume you are familiar with `flake8 configuration
 If you are using Sphinx or other extensions to reStructuredText, you will
 want to define any additional directives or roles you are using to avoid
 false positive ``RST303`` and ``RST304`` violations. You may also need to
-ingore ``RST307`` if using Sphinx directives with arguments.
+ignore ``RST307`` if using Sphinx directives with arguments.
 
 You can set these at the command line if you wish::
 

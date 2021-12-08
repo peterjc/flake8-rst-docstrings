@@ -3,34 +3,9 @@ name: test
 on: [push, pull_request]
 
 jobs:
-  linting:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Lint code
-      run: |
-        if grep -P '\t' *.py *.rst; then
-            echo 'Tabs are bad, please use four spaces.';
-            false;
-        fi
-        if grep -n -r '[[:blank:]]$' *.py *.rst; then
-            echo 'Please remove trailing whitespace.'; false;
-        fi
-        pip install --upgrade pip setuptools
-        pip install flake8 flake8-docstrings restructuredtext-lint flake8-black;
-        echo "Using restructuredtext-lint to check documentation"
-        restructuredtext-lint *.rst
-        echo "Using flake8 to check Python code"
-        flake8 setup.py flake8_rst_docstrings.py
-
   run-tests:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
     steps:
@@ -39,13 +14,9 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install package and pytest
+    - name: Install tox
       run: |
-        python setup.py install
-        pip install pytest
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
     - name: Run tests
-      run: |
-        echo "On this machine \$LANG=$LANG"
-        echo "Checking our own docstrings are valid RST"
-        flake8 --select RST setup.py flake8_rst_docstrings.py
-        pytest --verbose
+      run: tox

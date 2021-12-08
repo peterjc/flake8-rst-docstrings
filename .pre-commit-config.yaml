@@ -29,7 +29,7 @@ repos:
     rev: 21.12b0
     hooks:
     -   id: black
-        args: [--check]
+        args: [--check, --diff]
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
@@ -40,10 +40,9 @@ repos:
             'flake8-bugbear',
             'flake8-sfs',
             'flake8-comprehensions',
-            'flake8-docstrings',
             'flake8-implicit-str-concat',
             'pydocstyle>=5.0.0',
-         ]
+        ]
 -   repo: https://github.com/asottile/blacken-docs
     rev: v1.12.0
     hooks:

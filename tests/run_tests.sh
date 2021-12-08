@@ -10,7 +10,7 @@ for code in RST??? ; do
     echo "======"
     for file in $code/*.py ; do
         echo "flake8 --select RST $file"
-        flake8 --select RST $file 2>&1 | grep ": $code "
+        flake8 --select RST $file 2| grep ": $code "
     done
     echo "Good, $code violations reported, as expected."
 done

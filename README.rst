@@ -10,9 +10,9 @@ flake8-rst-docstrings
 .. image:: https://results.pre-commit.ci/badge/github/peterjc/flake8-rst-docstrings/master.svg
    :target: https://results.pre-commit.ci/latest/github/peterjc/flake8-rst-docstrings/master
    :alt: pre-commit.ci status
-.. image:: https://img.shields.io/travis/peterjc/flake8-rst-docstrings/master.svg
-   :alt: Testing with TravisCI
-   :target: https://travis-ci.org/peterjc/flake8-rst-docstrings/branches
+.. image:: https://img.shields.io/github/workflow/status/peterjc/flake8-rst-docstrings/test?logo=github-actions
+   :alt: GitHub workflow status
+   :target: https://github.com/peterjc/flake8-rst-docstrings/actions
 .. image:: https://img.shields.io/pypi/dm/flake8-rst-docstrings.svg
    :alt: PyPI downloads
    :target: https://pypistats.org/packages/flake8-rst-docstrings

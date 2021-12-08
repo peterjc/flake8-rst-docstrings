@@ -1,4 +1,5 @@
 """Test suite."""
+import ast
 import glob
 import os.path
 from os.path import join
@@ -60,6 +61,20 @@ def test_expected_failures(modpath, expected_failure):
     assert retcode, "expected failure (%s), got success" % code
     needle = ": %s " % code
     assert needle in out
+
+    with open(os.path.join(modpath, expected_failure)) as f:
+        doc = ast.get_docstring(
+            ast.parse(f.read(), expected_failure),
+            clean=True,
+        )
+
+    # keep "literal" lines, skip shell lines
+    result_check = "".join(
+        line + "\n" for line in doc.splitlines() if line.startswith("    RST")
+    )
+    if result_check:
+        modpath = os.path.join(modpath, "")
+        assert out.replace(modpath, "    ") == result_check
 
 
 def test_expected_successes(modpath):

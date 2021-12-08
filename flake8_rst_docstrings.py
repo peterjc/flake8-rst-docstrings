@@ -4,9 +4,26 @@ This is a plugin for the tool flake8 tool for checking Python
 source code.
 """
 import ast
+import re
 
 import restructuredtext_lint as rst_lint
 
+try:
+    # if sphinx is available, get the filtering regex from it directly
+    from sphinx.ext.autodoc import py_ext_sig_re
+except ImportError:
+    # otherwise use own copy from Sphinx 4.3.1 (hasn't changed since
+    # it was added in 0.6 so probably pretty safe)
+    py_ext_sig_re = re.compile(
+        r"""^ ([\w.]+::)?            # explicit module name
+              ([\w.]+\.)?            # module and/or class name(s)
+              (\w+)  \s*             # thing name
+              (?: \((.*)\)           # optional: arguments
+               (?:\s* -> \s* (.*))?  #           return annotation
+              )? $                   # and nothing more
+              """,
+        re.VERBOSE,
+    )
 
 __version__ = "0.2.4"
 
@@ -161,6 +178,13 @@ class reStructuredTextChecker:
                 if not docstring:
                     # People can use flake8-docstrings to report missing docstrings
                     continue
+                # strip the first line if it's a signature
+                firstline = docstring.splitlines()[0]
+                if py_ext_sig_re.match(firstline.strip()):
+                    # replace by an empty line so the line number
+                    # doesn't need to be adjusted
+                    docstring = docstring.replace(firstline, "")
+
                 try:
                     rst_errors = list(rst_lint.lint(docstring))
                 except Exception as err:

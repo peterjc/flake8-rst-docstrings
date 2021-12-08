@@ -3,7 +3,7 @@
 This should fail validation:
 
     $ flake8 --select RST RST401/sub_title.py
-    RST401/sub_title.py:20:1: RST401 Unexpected section title
+    RST401/sub_title.py:20:1: RST401 Unexpected section title.
 
 See below.
 """

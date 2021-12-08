@@ -3,7 +3,7 @@
 This file should fail RST validation:
 
     $ flake8 --select RST RST301/nesting.py
-    RST301/nesting.py:21:1: RST301 Unexpected indentation
+    RST301/nesting.py:21:1: RST301 Unexpected indentation.
 
 See below.
 """

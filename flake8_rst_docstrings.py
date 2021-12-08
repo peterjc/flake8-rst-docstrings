@@ -180,11 +180,11 @@ class reStructuredTextChecker:
                         start = node.body[0].lineno - 1  # AST value 1 based
                     except AttributeError:
                         # On Python 3.7 or older, and must compute start line
-                        start = node.body[0].lineno - len(
-                            ast.get_docstring(node, clean=False).splitlines()
+                        start = (
+                            node.body[0].lineno
+                            - ast.get_docstring(node, clean=False).count("\n")
+                            - 1
                         )
-                        if isinstance(node, ast.Module) and start > 1:
-                            start -= 1  # Why?
                     assert (
                         node.body[0].lineno >= 1 and start >= 0
                     ), "Bad start line, node line number %i for: %s\n" % (

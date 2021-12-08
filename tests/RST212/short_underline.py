@@ -12,6 +12,9 @@ and that is considered an error. This should fail::
 
     $ flake8 --select RST RST212/short_underline.py
     RST212/short_underline.py:9:1: RST212 Title underline too short.
+    RST212/short_underline.py:9:1: RST212 Title underline too short.
+
+It's displayed twice, I don't know why.
 
 Nice
 ====

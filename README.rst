@@ -239,6 +239,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.2.5  2021-12-10 - Ignore function signature lines at start of docstrings.
 v0.2.4  2021-12-09 - Fixed rare line number problem under Python 3.7 or older.
                    - Updated test framework to use ``pytest``.
                    - Required Python 3.6 or later.

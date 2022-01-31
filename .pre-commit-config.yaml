@@ -30,6 +30,7 @@ repos:
     hooks:
     -   id: black
         args: [--check, --diff]
+        exclude: tests/test_cases/example_unicode.py
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:

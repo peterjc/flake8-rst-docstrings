@@ -17,13 +17,13 @@ Now with an invalid code block argument:
   Hello
 
 Here are some actual examples from the Sphinx v4.0.0
-documentation:
+documentation, the first updated for Python 3:
 
 .. code-block:: python
    :caption: this.py
    :name: this-py
 
-   print "Explicit is better than implicit."
+   print("Explicit is better than implicit.")
 
 And:
 

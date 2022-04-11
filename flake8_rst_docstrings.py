@@ -161,16 +161,12 @@ class reStructuredTextChecker:
             )
             yield 0, 0, msg, type(self)
         else:
-            try:
-                wanted = (
-                    ast.Module,
-                    ast.ClassDef,
-                    ast.FunctionDef,
-                    ast.AsyncFunctionDef,
-                )
-            except AttributeError:
-                # Python 3.3 and 3.4 lacked ast.AsyncFunctionDef
-                wanted = (ast.Module, ast.ClassDef, ast.FunctionDef)
+            wanted = (
+                ast.Module,
+                ast.ClassDef,
+                ast.FunctionDef,
+                ast.AsyncFunctionDef,
+            )
             for node in ast.walk(self.tree):
                 if not isinstance(node, wanted):
                     continue

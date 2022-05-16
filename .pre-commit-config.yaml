@@ -51,7 +51,7 @@ repos:
         additional_dependencies: [black==22.3.0]
         exclude: ^(.github/|tests/test_cases/example_unicode.py)
 -   repo: https://github.com/myint/rstcheck
-    rev: v3.4.0
+    rev: v6.0.0a1
     hooks:
     -   id: rstcheck
         args: [

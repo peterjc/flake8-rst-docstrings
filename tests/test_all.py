@@ -25,7 +25,7 @@ def modpath(request):
     return os.path.dirname(request.module.__file__)
 
 
-def flake8(path, *, select="RST", roles=None, directives=None):
+def flake8(path, *, select="RST", roles=None, directives=None, substitutions=None):
     """Run flake8 on a specific ``path`` and report the results.
 
     :param str path: path to run flake8 on
@@ -33,6 +33,8 @@ def flake8(path, *, select="RST", roles=None, directives=None):
     :param str roles: comma-separated list of roles to ignore (for ``RST304``)
     :param str directives: comma-separated list of directives to ignore
         (for ``RST303``)
+    :param str substitutions: comma-separated list of substitutions to ignore
+        (for ``RST305``)
     :returns: a pair of flake8"s return code and its decoded stdout
     :rtype: tuple[int, str]
     """
@@ -41,6 +43,8 @@ def flake8(path, *, select="RST", roles=None, directives=None):
         args.extend(["--rst-roles", roles])
     if directives:
         args.extend(["--rst-directives", directives])
+    if substitutions:
+        args.extend(["--rst-substitutions", substitutions])
     args.append(path)
 
     p = Popen(args, stdin=DEVNULL, stdout=PIPE)
@@ -97,6 +101,15 @@ def test_extra_roles(modpath):
     retcode, out = flake8(
         join(modpath, "RST304/sphinx-roles.py"),
         roles="need,need_incoming",
+    )
+    assert not retcode, out
+
+
+def test_extra_substitutions(modpath):
+    """Verify that ``RST305`` can be fixed by specifying substitutions to allow."""
+    retcode, out = flake8(
+        join(modpath, "RST305/sphinx-substitutions"),
+        substitutions="bar",
     )
     assert not retcode, out
 

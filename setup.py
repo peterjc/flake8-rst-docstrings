@@ -41,7 +41,7 @@ setup(
     ],
     keywords="PEP 287, pep287, docstrings, rst, reStructuredText",
     py_modules=["flake8_rst_docstrings"],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         "flake8 >= 3.0.0",
         "restructuredtext_lint",

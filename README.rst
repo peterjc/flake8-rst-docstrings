@@ -195,8 +195,8 @@ We assume you are familiar with `flake8 configuration
 
 If you are using Sphinx or other extensions to reStructuredText, you will
 want to define any additional directives or roles you are using to avoid
-false positive ``RST303`` and ``RST304`` violations. You may also need to
-ignore ``RST307`` if using Sphinx directives with arguments.
+false positive ``RST303``, ``RST304`` and ``RST305`` violations. You may also
+need to ignore ``RST307`` if using Sphinx directives with arguments.
 
 You can set these at the command line if you wish::
 
@@ -213,6 +213,8 @@ for example in your ``.flake8``, ``setup.cfg``, or ``tox.ini`` file, e.g.::
     rst-directives =
         envvar,
         exception,
+    rst-substitutions =
+        version,
     extend-ignore =
         RST307,
         # ...
@@ -239,7 +241,9 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.2.6  *Pending*  - Required Python 3.7 or later.
+v0.2.6  2022-06-07 - Configuration option to define additional substitutions
+                     (e.g. from Sphinx) for ``RST305``.
+                   - Requires Python 3.7 or later.
 v0.2.5  2021-12-10 - Ignore function signature lines at start of docstrings.
 v0.2.4  2021-12-09 - Fixed rare line number problem under Python 3.7 or older.
                    - Updated test framework to use ``pytest``.

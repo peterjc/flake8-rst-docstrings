@@ -239,10 +239,11 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.2.6  *Pending*  - Required Python 3.7 or later.
 v0.2.5  2021-12-10 - Ignore function signature lines at start of docstrings.
 v0.2.4  2021-12-09 - Fixed rare line number problem under Python 3.7 or older.
                    - Updated test framework to use ``pytest``.
-                   - Required Python 3.6 or later.
+                   - Requires Python 3.6 or later.
 v0.2.3  2021-05-03 - Fixed line number assert in one-line docstring-only file.
 v0.2.2  2021-04-30 - Fixed line number problem under Python 3.8 or later.
                    - Corrected off-by-one line number in module docstrings.

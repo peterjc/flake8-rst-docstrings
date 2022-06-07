@@ -91,7 +91,9 @@ code_mappings_by_level = {
 }
 
 
-def code_mapping(level, msg, extra_directives, extra_roles, default=99):
+def code_mapping(
+    level, msg, extra_directives, extra_roles, extra_substitutions, default=99
+):
     """Return an error code between 0 and 99."""
     try:
         return code_mappings_by_level[level][msg]
@@ -103,12 +105,19 @@ def code_mapping(level, msg, extra_directives, extra_roles, default=99):
     # ---> 'Unknown directive type'
     # e.g. 'Unknown interpreted text role "need".'
     # ---> 'Unknown interpreted text role'
+    # e.g. 'Undefined substitution referenced: "subst".'
+    # ---> 'Undefined substitution referenced:'
     if msg.count('"') == 2 and ' "' in msg:
         value = msg.split('"', 2)[1]
         txt = msg.replace(' "' + value + '"', ' "*"')
         if txt == 'Unknown directive type "*".' and value in extra_directives:
             return 0
         if txt == 'Unknown interpreted text role "*".' and value in extra_roles:
+            return 0
+        if (
+            txt == 'Undefined substitution referenced: "*".'
+            and value in extra_substitutions
+        ):
             return 0
         return code_mappings_by_level[level].get(txt, default)
     return default
@@ -127,7 +136,7 @@ class reStructuredTextChecker:
 
     @classmethod
     def add_options(cls, parser):
-        """Add RST directives and roles options."""
+        """Add RST directives, roles and substitutions options."""
         parser.add_option(
             "--rst-directives",
             metavar="LIST",
@@ -144,12 +153,21 @@ class reStructuredTextChecker:
             comma_separated_list=True,
             help="Comma-separated list of additional RST roles.",
         )
+        parser.add_option(
+            "--rst-substitutions",
+            metavar="LIST",
+            default="",
+            parse_from_config=True,
+            comma_separated_list=True,
+            help="Comma-separated list of additional RST substitutions.",
+        )
 
     @classmethod
     def parse_options(cls, options):
         """Adding black-config option."""
         cls.extra_directives = options.rst_directives
         cls.extra_roles = options.rst_roles
+        cls.extra_substitutions = options.rst_substitutions
 
     def run(self):
         """Use docutils to check docstrings are valid RST."""
@@ -226,7 +244,11 @@ class reStructuredTextChecker:
                     # Map the string to a unique code:
                     msg = rst_error.message.split("\n", 1)[0]
                     code = code_mapping(
-                        rst_error.level, msg, self.extra_directives, self.extra_roles
+                        rst_error.level,
+                        msg,
+                        self.extra_directives,
+                        self.extra_roles,
+                        self.extra_substitutions,
                     )
                     if not code:
                         # We ignored it, e.g. a known Sphinx role

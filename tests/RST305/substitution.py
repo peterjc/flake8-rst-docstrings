@@ -9,7 +9,8 @@ So far so good, but what if the definition is not in the same
 docstring fragment - it could be in an included footer?
 
 Here the |bar| substitution definition is missing, so this
-docstring in isolation should fail validation::
+docstring in isolation should fail validation, unless the substitution
+is ignored::
 
     $ flake8 --select RST RST305/substitution.py
     RST305/substitution.py:11:1: RST305 Undefined substitution referenced: "bar".

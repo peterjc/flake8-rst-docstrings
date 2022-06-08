@@ -242,7 +242,8 @@ Version History
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
 v0.2.6  2022-06-07 - Configuration option to define additional substitutions
-                     (e.g. from Sphinx) for ``RST305``.
+                     (e.g. from Sphinx) for ``RST305`` (contribution from
+                     `Andreas Thum <https://github.com/andthum>`_).
                    - Requires Python 3.7 or later.
 v0.2.5  2021-12-10 - Ignore function signature lines at start of docstrings.
 v0.2.4  2021-12-09 - Fixed rare line number problem under Python 3.7 or older.

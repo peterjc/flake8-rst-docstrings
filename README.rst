@@ -267,7 +267,7 @@ v0.0.12 2019-11-18 - Adds ``RST213`` to ``RST217``.
 v0.0.11 2019-08-07 - Configuration options to define additional directives and
                      roles (e.g. from Sphinx) for ``RST303`` and ``RST304``.
 v0.0.10 2019-06-17 - Fixed flake8 "builtins" parameter warning (contribution
-                     from `Ruben, @ROpdebee <https://github.com/ROpdebee>`_).
+                     from `Ruben Opdebeeck <https://github.com/ROpdebee>`_).
 v0.0.9  2019-04-22 - Checks positive and negative examples in test framework.
                    - Adds ``RST212``, ``RST305`` and ``RST306`` (contribution
                      from `Brian Skinn <https://github.com/bskinn>`_).

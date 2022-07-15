@@ -197,7 +197,7 @@ class reStructuredTextChecker:
                 if py_ext_sig_re.match(firstline.strip()):
                     # replace by an empty line so the line number
                     # doesn't need to be adjusted
-                    docstring = docstring.replace(firstline, "")
+                    docstring = docstring.replace(firstline, "", 1)
 
                 try:
                     rst_errors = list(rst_lint.lint(docstring))

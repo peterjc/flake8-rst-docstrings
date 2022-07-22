@@ -186,6 +186,10 @@ configuration file's select or ignore list.
 Note in addition to the ``RST`` prefix alone you can use partial codes
 like ``RST2`` meaning ``RST200``, ``RST201``, ... and so on.
 
+Normally flake8 violations are to a specific line *and* column. Unfortuntatley,
+docutils only gives us a line number, and occasionally this only points to the
+start of a paragraph - not the exact line with an issue.
+
 
 Configuration
 -------------

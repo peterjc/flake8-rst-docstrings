@@ -6,7 +6,6 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
     steps:
@@ -15,13 +14,9 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install package and pytest
+    - name: Install tox
       run: |
-        python setup.py install
-        pip install pytest
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
     - name: Run tests
-      run: |
-        echo "On this machine \$LANG=$LANG"
-        echo "Checking our own docstrings are valid RST"
-        flake8 --select RST setup.py flake8_rst_docstrings.py
-        pytest --verbose
+      run: tox

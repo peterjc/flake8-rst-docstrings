@@ -1,0 +1,50 @@
+[build-system]
+requires = ['pip>=20.3', 'setuptools>=61', 'wheel']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'flake8-rst-docstrings'
+description = 'Python docstring reStructuredText (RST) validator for flake8'
+keywords = ['strings', 'formatting', 'style', 'docstrings', 'reStructuredText']
+license = {text = 'MIT'}
+readme = 'README.rst'
+authors = [
+  {name = 'Peter J. A. Cock'}
+]
+maintainers = [
+  {name = 'Peter J. A. Cock', email = 'p.j.a.cock@googlemail.com'}
+]
+classifiers = [
+  'Development Status :: 4 - Beta',
+  'Intended Audience :: Developers',
+  'Framework :: Flake8',
+  'License :: OSI Approved :: MIT License',
+  'Operating System :: OS Independent',
+  'Topic :: Software Development :: Libraries :: Python Modules',
+  'Topic :: Software Development :: Quality Assurance',
+  'Programming Language :: Python',
+  'Programming Language :: Python :: 3',
+  'Programming Language :: Python :: 3 :: Only'
+]
+requires-python = '>=3.7'
+dependencies = [
+  'flake8>=3',
+  'restructuredtext_lint',
+  'pygments',
+]
+dynamic = ['version']
+[project.entry-points]
+'flake8.extension' = {RST = 'flake8_rst_docstrings:reStructuredTextChecker'}
+[project.optional-dependencies]
+develop = ['build', 'twine']
+[project.urls]
+Homepage = 'https://github.com/peterjc/flake8-rst-docstrings'
+'Source Code' = 'https://github.com/peterjc/flake8-rst-docstrings/'
+'Bug Tracker' = 'https://github.com/peterjc/flake8-rst-docstrings/issues'
+Documentation = 'https://github.com/peterjc/flake8-rst-docstrings/blob/master/README.rst'
+
+[tool.setuptools]
+py-modules = ['flake8_rst_docstrings']
+zip-safe = true
+[tool.setuptools.dynamic]
+version = {attr = 'flake8_rst_docstrings.__version__'}

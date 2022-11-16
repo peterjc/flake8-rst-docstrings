@@ -170,6 +170,11 @@ command will install the plugin with its dependencies::
 
     $ conda install -c conda-forge flake8-rst-docstrings
 
+Developers may install the plugin from the git repository with optional
+dependencies::
+
+    $ pip install -e .[develop]
+
 The new validator should be automatically included when using ``flake8`` which
 may now report additional validation codes starting with ``RST`` (as defined
 above). For example::
@@ -245,6 +250,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.3.0  2022-11-16 - Replaced ``setup.py`` with ``pyproject.toml``.
 v0.2.7  2022-07-15 - Fix where function signature occurred in docstring body.
 v0.2.6  2022-06-07 - Configuration option to define additional substitutions
                      (e.g. from Sphinx) for ``RST305`` (contribution from
@@ -303,7 +309,7 @@ This plugin is on GitHub at https://github.com/peterjc/flake8-rst-docstrings
 To make a new release once tested locally and on TravisCI::
 
     $ git tag vX.Y.Z
-    $ python setup.py sdist --formats=gztar && python setup.py bdist_wheel
+    $ python -m build
     $ git push origin master --tags
     $ twine upload dist/flake8?rst?docstrings-X.Y.Z*
 

@@ -170,11 +170,6 @@ command will install the plugin with its dependencies::
 
     $ conda install -c conda-forge flake8-rst-docstrings
 
-Developers may install the plugin from the git repository with optional build
-dependencies::
-
-    $ pip install -e .[develop]
-
 The new validator should be automatically included when using ``flake8`` which
 may now report additional validation codes starting with ``RST`` (as defined
 above). For example::
@@ -305,6 +300,11 @@ Developers
 ----------
 
 This plugin is on GitHub at https://github.com/peterjc/flake8-rst-docstrings
+
+Developers may install the plugin from the git repository with optional build
+dependencies::
+
+    $ pip install -e .[develop]
 
 To make a new release once tested locally and on TravisCI::
 

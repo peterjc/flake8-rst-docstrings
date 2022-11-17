@@ -170,7 +170,7 @@ command will install the plugin with its dependencies::
 
     $ conda install -c conda-forge flake8-rst-docstrings
 
-Developers may install the plugin from the git repository with optional
+Developers may install the plugin from the git repository with optional build
 dependencies::
 
     $ pip install -e .[develop]

@@ -10,7 +10,7 @@ flake8-rst-docstrings
 .. image:: https://results.pre-commit.ci/badge/github/peterjc/flake8-rst-docstrings/master.svg
    :target: https://results.pre-commit.ci/latest/github/peterjc/flake8-rst-docstrings/master
    :alt: pre-commit.ci status
-.. image:: https://img.shields.io/github/workflow/status/peterjc/flake8-rst-docstrings/test?logo=github-actions
+.. image:: https://img.shields.io/github/actions/workflow/status/peterjc/flake8-rst-docstrings/test.yml?logo=github-actions
    :alt: GitHub workflow status
    :target: https://github.com/peterjc/flake8-rst-docstrings/actions
 .. image:: https://img.shields.io/pypi/dm/flake8-rst-docstrings.svg

@@ -26,7 +26,7 @@ repos:
         language: pygrep
         files: \.(py|sh|rst|yml|yaml)$
 -   repo: https://github.com/psf/black
-    rev: 23.7.0
+    rev: 23.9.1
     hooks:
     -   id: black
         args: [--check, --diff]
@@ -51,7 +51,7 @@ repos:
         additional_dependencies: [black==23.7.0]
         exclude: ^(.github/|tests/test_cases/example_unicode.py)
 -   repo: https://github.com/rstcheck/rstcheck
-    rev: v6.1.2
+    rev: v6.2.0
     hooks:
     -   id: rstcheck
         args: [

@@ -238,6 +238,10 @@ suggest ignoring some of the violation codes::
         # See https://github.com/peterjc/flake8-rst-docstrings/issues/17
         RST201,RST203,RST301,
 
+Using ``*arg`` or ``**kwargs`` without escaping in argument descriptions has
+been special-cased to avoid triggering ``RST213`` and ``RST210`` respectively.
+However, other variable names used this way will trigger as missing closing
+markup for emphasis and strong, so you may have to ignore those codes as well.
 
 Version History
 ---------------

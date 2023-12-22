@@ -311,6 +311,10 @@ dependencies::
 
     $ pip install -e .[develop]
 
+To run the tests locally::
+
+    $ pytest --verbose
+
 To make a new release once tested locally and on TravisCI::
 
     $ git tag vX.Y.Z

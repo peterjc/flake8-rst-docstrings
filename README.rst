@@ -238,6 +238,10 @@ suggest ignoring some of the violation codes::
         # See https://github.com/peterjc/flake8-rst-docstrings/issues/17
         RST201,RST203,RST301,
 
+Using ``*arg`` or ``**kwargs`` without escaping in argument descriptions has
+been special-cased to avoid triggering ``RST213`` and ``RST210`` respectively.
+However, other variable names used this way will trigger as missing closing
+markup for emphasis and strong, so you may have to ignore those codes as well.
 
 Version History
 ---------------
@@ -245,6 +249,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.3.1  2023-12-22 - Ignore ``*args`` (``RST213``) & ``**kwargs`` (``RST210``)
 v0.3.0  2022-11-16 - Replaced ``setup.py`` with ``pyproject.toml``.
 v0.2.7  2022-07-15 - Fix where function signature occurred in docstring body.
 v0.2.6  2022-06-07 - Configuration option to define additional substitutions
@@ -305,6 +310,10 @@ Developers may install the plugin from the git repository with optional build
 dependencies::
 
     $ pip install -e .[develop]
+
+To run the tests locally::
+
+    $ pytest --verbose
 
 To make a new release once tested locally and on TravisCI::
 

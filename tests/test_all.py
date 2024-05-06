@@ -1,4 +1,5 @@
 """Test suite."""
+
 import ast
 import glob
 import os.path

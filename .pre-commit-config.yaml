@@ -1,7 +1,7 @@
 # pre-commit run --all-files
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
     hooks:
     -   id: check-added-large-files
     -   id: check-case-conflict
@@ -26,13 +26,13 @@ repos:
         language: pygrep
         files: \.(py|sh|rst|yml|yaml)$
 -   repo: https://github.com/psf/black
-    rev: 23.12.1
+    rev: 24.4.2
     hooks:
     -   id: black
         args: [--check, --diff]
         exclude: ^tests/test_cases/example_unicode.py
 -   repo: https://github.com/PyCQA/flake8
-    rev: 6.1.0
+    rev: 7.0.0
     hooks:
     -   id: flake8
         additional_dependencies: [

@@ -31,7 +31,7 @@ class Example(
     def method(self):
         """Do stuff.
 
-        Standard paragraph, then intendation as a quote...
+        Standard paragraph, then indentation as a quote...
 
            * Alpha
            * Beta

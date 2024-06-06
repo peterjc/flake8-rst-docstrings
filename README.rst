@@ -127,7 +127,7 @@ RST307 Error in "XXX" directive:
 RST399 Previously unseen major error, not yet assigned a unique code.
 ====== =======================================================================
 
-Severe or critial error codes:
+Severe or critical error codes:
 
 ====== =======================================================================
 Code   Description

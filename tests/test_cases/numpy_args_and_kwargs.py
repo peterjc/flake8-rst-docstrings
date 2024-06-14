@@ -1,0 +1,23 @@
+"""Numpy style docstring example."""
+
+
+def module_level_function(param1, param2=None, *args, **kwargs):
+    """Accept keyword arguments.
+
+    Here using the Numpy docstring style, notice that we have *not* escaped
+    the asterisk in ``*args*`` or ``**kwargs`` in the parameter list.
+
+    Parameters
+    ----------
+    param1 : int
+        The first parameter.
+    param2 : str optional
+        The second parameter.
+    *args
+        Variable length argument list.
+    **kwargs
+        Arbitrary keyword arguments.
+
+    ...
+    """
+    pass

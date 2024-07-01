@@ -32,7 +32,7 @@ repos:
         args: [--check, --diff]
         exclude: ^tests/test_cases/example_unicode.py
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+    rev: 7.1.0
     hooks:
     -   id: flake8
         additional_dependencies: [
@@ -45,7 +45,7 @@ repos:
             'pydocstyle>=5.0.0',
         ]
 -   repo: https://github.com/asottile/blacken-docs
-    rev: 1.16.0
+    rev: 1.18.0
     hooks:
     -   id: blacken-docs
         additional_dependencies: [black==23.12.1]

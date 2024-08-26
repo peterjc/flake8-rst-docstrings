@@ -26,8 +26,7 @@ except ImportError:
         re.VERBOSE,
     )
 
-__version__ = "0.3.0"
-
+__version__ = "0.3.1"
 
 rst_prefix = "RST"
 rst_fail_load = 900
@@ -122,6 +121,23 @@ def code_mapping(
             return 0
         return code_mappings_by_level[level].get(txt, default)
     return default
+
+
+def special_case_unescaped(docstring, variable):
+    """Can RST213 for ``*arg``, or RST210 for ``*kwarg`` be ignored."""
+    if "\nArgs:\n" in docstring and docstring.find("\nArgs:\n") < docstring.find(
+        f"    {variable}:"
+    ):
+        # Ignore special case used in Google docstring style
+        return True
+    elif "\nParameters\n----------\n" in docstring:
+        i = docstring.find("\nParameters\n----------\n")
+        if i < docstring.find(f"\n{variable}\n") or i < docstring.find(
+            f"\n{variable} :"
+        ):
+            # Ignore special case used in NumPy docstring style
+            return True
+    return False
 
 
 class reStructuredTextChecker:
@@ -257,6 +273,15 @@ class reStructuredTextChecker:
                     assert 0 < code < 100, code
                     code += 100 * rst_error.level
                     msg = "%s%03i %s" % (rst_prefix, code, msg)
+
+                    # Silence special case use of *args and **kwargs
+                    # (hopefully won't mask a true positive in same docstring)
+                    if code == 210 and special_case_unescaped(docstring, "**kwargs"):
+                        # Ignore special case used in Google/NumPy docstring style
+                        continue
+                    elif code == 213 and special_case_unescaped(docstring, "*args"):
+                        # Ignore special case used in Google/NumPy docstring style
+                        continue
 
                     # We don't know the column number, leaving as zero.
                     yield start + rst_error.line, 0, msg, type(self)

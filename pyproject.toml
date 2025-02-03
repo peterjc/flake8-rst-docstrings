@@ -26,7 +26,7 @@ classifiers = [
   'Programming Language :: Python :: 3',
   'Programming Language :: Python :: 3 :: Only'
 ]
-requires-python = '>=3.7'
+requires-python = '>=3.8'
 dependencies = [
   'flake8>=3',
   'restructuredtext_lint',

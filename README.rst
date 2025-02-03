@@ -158,7 +158,7 @@ RST903 Failed to lint docstring
 Installation and usage
 ----------------------
 
-Python 3.7 or later now required. Earlier versions did support Python 2.7, use
+Python 3.8 or later now required. Earlier versions did support Python 2.7, use
 v0.0.14 if required.
 
 We recommend installing the plugin using pip, which handles the dependencies::

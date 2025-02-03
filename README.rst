@@ -245,7 +245,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.3.1  2025-02-03 - Requires Python 3.8 or later (no code changes).
+v0.3.1  *Pending*  - Requires Python 3.8 or later (no code changes).
 v0.3.0  2022-11-16 - Replaced ``setup.py`` with ``pyproject.toml``.
 v0.2.7  2022-07-15 - Fix where function signature occurred in docstring body.
 v0.2.6  2022-06-07 - Configuration option to define additional substitutions

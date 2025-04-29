@@ -109,6 +109,7 @@ RST216 Multiple roles in interpreted text (both prefix and suffix present; only 
 RST217 Mismatch: both interpreted text role suffix and reference suffix.
 RST218 Literal block expected; none found.
 RST219 Inline substitution_reference start-string without end-string.
+RST220 
 RST299 Previously unseen warning, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -245,7 +246,8 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.3.1  *Pending*  - Requires Python 3.8 or later (no code changes).
+v0.3.1  *Pending*  - Adds ``RST220`` for redefined anonymous links.
+                   - Requires Python 3.8 or later (no code changes).
 v0.3.0  2022-11-16 - Replaced ``setup.py`` with ``pyproject.toml``.
 v0.2.7  2022-07-15 - Fix where function signature occurred in docstring body.
 v0.2.6  2022-06-07 - Configuration option to define additional substitutions

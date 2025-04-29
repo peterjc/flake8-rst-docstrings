@@ -63,6 +63,7 @@ code_mapping_warning = {
     "Mismatch: both interpreted text role suffix and reference suffix.": 17,
     "Literal block expected; none found.": 18,
     "Inline substitution_reference start-string without end-string.": 19,
+    'Duplicate explicit target name: "*".': 20,
 }
 
 # Level 3 - error
@@ -224,11 +225,12 @@ class reStructuredTextChecker:
                             - ast.get_docstring(node, clean=False).count("\n")
                             - 1
                         )
-                    assert (
-                        node.body[0].lineno >= 1 and start >= 0
-                    ), "Bad start line, node line number %i for: %s\n" % (
-                        node.body[0].lineno,
-                        docstring,
+                    assert node.body[0].lineno >= 1 and start >= 0, (
+                        "Bad start line, node line number %i for: %s\n"
+                        % (
+                            node.body[0].lineno,
+                            docstring,
+                        )
                     )
                 for rst_error in rst_errors:
                     # TODO - make this a configuration option?

@@ -20,6 +20,6 @@ What happens here?
     RST220/dup_explicit_target.py:15:1: RST220 Duplicate explicit target name: "single trailing underscore".
 
 This file triggers an error when the implicitly named link is redefined.
-"""
+"""  # noqa: E501
 
 print("Hello world")

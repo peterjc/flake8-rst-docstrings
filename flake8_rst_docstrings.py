@@ -225,12 +225,11 @@ class reStructuredTextChecker:
                             - ast.get_docstring(node, clean=False).count("\n")
                             - 1
                         )
-                    assert node.body[0].lineno >= 1 and start >= 0, (
-                        "Bad start line, node line number %i for: %s\n"
-                        % (
-                            node.body[0].lineno,
-                            docstring,
-                        )
+                    assert (
+                        node.body[0].lineno >= 1 and start >= 0
+                    ), "Bad start line, node line number %i for: %s\n" % (
+                        node.body[0].lineno,
+                        docstring,
                     )
                 for rst_error in rst_errors:
                     # TODO - make this a configuration option?

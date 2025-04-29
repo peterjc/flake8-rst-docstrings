@@ -131,7 +131,7 @@ def test_version():
     out, err = p.communicate()
 
     assert not p.returncode, err
-    assert b"rst-docstrings:" in out or b"rst-\ndocstrings:" in out, (
-        "should appear in flake8 version string"
-    )
+    assert (
+        b"rst-docstrings:" in out or b"rst-\ndocstrings:" in out
+    ), "should appear in flake8 version string"
     assert not err

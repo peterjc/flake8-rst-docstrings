@@ -109,7 +109,7 @@ RST216 Multiple roles in interpreted text (both prefix and suffix present; only 
 RST217 Mismatch: both interpreted text role suffix and reference suffix.
 RST218 Literal block expected; none found.
 RST219 Inline substitution_reference start-string without end-string.
-RST220 
+RST220 Duplicate explicit target name: "XXX".
 RST299 Previously unseen warning, not yet assigned a unique code.
 ====== =======================================================================
 

@@ -1,4 +1,4 @@
-"""Print 'Hello world' to the terminal.
+"""Print 'Hello world' to the terminal; test links in docstrings.
 
 It is common in RST to use unnamed or anonymous links in text (like
 `here <https://example.com/t-and-c/>`__ and `here
@@ -11,8 +11,8 @@ text and URL again too (`single trailing underscore
 <https://example.com/links.html>`_).
 
 However, the missing second underscore becomes a problem if the same link text
-is used again for another implicitly named link weth a different URL (e.g.
-missing `single trailing underscore <https://example.com/bad.html>`_ *again*).
+is used again for another implicitly named link with a *different* URL (e.g.
+missing `single trailing underscore <https://example.com/bad.html>`_).
 
 What happens here?
 

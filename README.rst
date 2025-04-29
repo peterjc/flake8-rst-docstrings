@@ -307,6 +307,11 @@ dependencies::
 
     $ pip install -e .[develop]
 
+For testing install `pytest` and run::
+
+    $ flake8 --select RST setup.py flake8_rst_docstrings.py
+    $ pytest --verbose
+
 To make a new release once tested locally and on TravisCI::
 
     $ git tag vX.Y.Z

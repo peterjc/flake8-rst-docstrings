@@ -126,10 +126,12 @@ def test_help():
 
 
 def test_version():
-    """Check that ``rst-docstrings`` appears in the help text."""
+    """Check that ``rst-docstrings`` appears in the version text."""
     p = Popen(["flake8", "--version"], stdin=DEVNULL, stdout=PIPE)
     out, err = p.communicate()
 
     assert not p.returncode, err
-    assert b"rst-docstrings:" in out, "should appear in flake8 version string"
+    assert b"rst-docstrings:" in out or b"rst-\ndocstrings:" in out, (
+        "should appear in flake8 version string"
+    )
     assert not err

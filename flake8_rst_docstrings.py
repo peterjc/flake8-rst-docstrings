@@ -166,7 +166,7 @@ class reStructuredTextChecker:
 
     @classmethod
     def parse_options(cls, options):
-        """Adding black-config option."""
+        """Parse options and add black-config option."""
         cls.extra_directives = options.rst_directives
         cls.extra_roles = options.rst_roles
         cls.extra_substitutions = options.rst_substitutions

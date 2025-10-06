@@ -125,6 +125,7 @@ RST304 Unknown interpreted text role "XXX".
 RST305 Undefined substitution referenced: "XXX".
 RST306 Unknown target name: "XXX".
 RST307 Error in "XXX" directive:
+RST308 Duplicate target name, cannot be used as a unique reference: "XXX".
 RST399 Previously unseen major error, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -246,7 +247,9 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.4.0  *Pending*  - Requires Python 3.9 or later.
+v0.4.0  *Pending*  - Tested with docutils v0.22.2
+                   - Adds `RST308` for duplicated target names.
+                   - Requires Python 3.9 or later.
 v0.3.1  2025-04-29 - Adds ``RST220`` for redefined anonymous links.
                    - Requires Python 3.8 or later (no code changes).
 v0.3.0  2022-11-16 - Replaced ``setup.py`` with ``pyproject.toml``.

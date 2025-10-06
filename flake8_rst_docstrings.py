@@ -80,6 +80,8 @@ code_mapping_error = {
     'Unknown target name: "*".': 6,
     # e.g. Error in "code" directive:
     'Error in "*" directive:': 7,
+    # e.g. Duplicate target name, cannot be used as a unique reference: "python".
+    'Duplicate target name, cannot be used as a unique reference: "*".': 8,
 }
 
 # Level 4 - severe

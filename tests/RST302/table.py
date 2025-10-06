@@ -4,7 +4,7 @@ This file should fail RST validation:
 
     $ flake8 --select RST RST302/table.py
     RST302/table.py:27:1: RST302 Malformed table.
-    RST302/table.py:45:1: RST302 Malformed table.
+    RST302/table.py:49:1: RST302 Malformed table.
 
 See below.
 """  # noqa: E510

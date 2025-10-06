@@ -2,8 +2,8 @@
 
 This should fail validation:
 
-    $ flake8 --select RST RST401/sub_title.py
-    RST401/sub_title.py:20:1: RST401 Unexpected section title.
+    $ flake8 --select RST RST309/sub_title.py
+    RST309/sub_title.py:20:1: RST309 Unexpected section title.
 
 See below.
 """

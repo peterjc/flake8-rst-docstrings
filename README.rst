@@ -126,6 +126,7 @@ RST305 Undefined substitution referenced: "XXX".
 RST306 Unknown target name: "XXX".
 RST307 Error in "XXX" directive:
 RST308 Duplicate target name, cannot be used as a unique reference: "XXX".
+RST309 Unexpected section title. *(replaced RST401 in docutils v0.22)*
 RST399 Previously unseen major error, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -134,7 +135,7 @@ Severe or critical error codes:
 ====== =======================================================================
 Code   Description
 ------ -----------------------------------------------------------------------
-RST401 Unexpected section title.
+RST401 Unexpected section title. *(downgraded to error, see RST309)*
 RST499 Previously unseen severe error, not yet assigned a unique code.
 ====== =======================================================================
 
@@ -249,6 +250,7 @@ Version Released   Changes
 ------- ---------- -----------------------------------------------------------
 v0.4.0  *Pending*  - Tested with docutils v0.22.2
                    - Adds `RST308` for duplicated target names.
+                   - Adds `RST309` replacing `RST401` (downgraded severity).
                    - Requires Python 3.9 or later.
 v0.3.1  2025-04-29 - Adds ``RST220`` for redefined anonymous links.
                    - Requires Python 3.8 or later (no code changes).

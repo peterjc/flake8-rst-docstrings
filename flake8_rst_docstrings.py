@@ -82,10 +82,15 @@ code_mapping_error = {
     'Error in "*" directive:': 7,
     # e.g. Duplicate target name, cannot be used as a unique reference: "python".
     'Duplicate target name, cannot be used as a unique reference: "*".': 8,
+    # This was RST401 prior to docutils v0.22:
+    "Unexpected section title.": 9,
 }
 
 # Level 4 - severe
-code_mapping_severe = {"Unexpected section title.": 1}
+code_mapping_severe = {
+    # See RST308 as of docutils v0.22:
+    "Unexpected section title.": 1,
+}
 
 code_mappings_by_level = {
     1: code_mapping_info,

@@ -246,6 +246,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
+v0.4.0  *Pending*  - Requires Python 3.9 or later.
 v0.3.1  2025-04-29 - Adds ``RST220`` for redefined anonymous links.
                    - Requires Python 3.8 or later (no code changes).
 v0.3.0  2022-11-16 - Replaced ``setup.py`` with ``pyproject.toml``.

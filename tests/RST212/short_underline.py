@@ -12,10 +12,6 @@ and that is considered an error. This should fail::
 
     $ flake8 --select RST RST212/short_underline.py
     RST212/short_underline.py:9:1: RST212 Title underline too short.
-    RST212/short_underline.py:9:1: RST212 Title underline too short.
-
-Note RST212 gets displayed twice, due to a known docutils bug.
-See https://sourceforge.net/p/docutils/bugs/346/
 
 Nice
 ====

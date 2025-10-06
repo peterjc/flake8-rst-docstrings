@@ -248,7 +248,7 @@ Version History
 ======= ========== ===========================================================
 Version Released   Changes
 ------- ---------- -----------------------------------------------------------
-v0.4.0  *Pending*  - Tested with docutils v0.22.2
+v0.4.0  2025-10-06 - Tested with docutils v0.22.2
                    - Adds `RST308` for duplicated target names.
                    - Adds `RST309` replacing `RST401` (downgraded severity).
                    - Requires Python 3.9 or later.

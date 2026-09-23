@@ -7,7 +7,7 @@ This file should fail RST validation:
     RST302/table.py:49:1: RST302 Malformed table.
 
 See below.
-"""  # noqa: E510
+"""
 
 
 # Deliberately has lots of arguments to be a multi-line statement:

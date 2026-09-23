@@ -315,9 +315,14 @@ dependencies::
 
     $ pip install -e .[develop]
 
+Please install `pre-commit` and use this for git pre-commit style checks:
+
+    $ pip install pre-commit
+    $ pre-commit install
+
 For testing install `pytest` and run::
 
-    $ flake8 --select RST setup.py flake8_rst_docstrings.py
+    $ flake8 --select RST flake8_rst_docstrings.py
     $ pytest --verbose
 
 To make a new release once tested locally and on TravisCI::

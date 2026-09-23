@@ -3,8 +3,8 @@
 This file should fail RST validation:
 
     $ flake8 --select RST RST302/table.py
-    RST302/table.py:27:1: RST302 Malformed table.
-    RST302/table.py:49:1: RST302 Malformed table.
+    RST302/table.py:27:1: RST302 Malformed table. No bottom table border found.
+    RST302/table.py:49:1: RST302 Malformed table. Right border not aligned or missing.
 
 See below.
 """  # noqa: E510

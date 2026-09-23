@@ -250,11 +250,12 @@ class reStructuredTextChecker:
                     # 3 - error   --> RST3## codes
                     # 4 - severe  --> RST4## codes
                     #
-                    # Map the string to a unique code:
-                    msg = rst_error.message.split("\n", 1)[0]
+                    # Map the first line to a unique code (any detail
+                    # follows on subsequent lines of the message):
+                    first_line = rst_error.message.split("\n", 1)[0]
                     code = code_mapping(
                         rst_error.level,
-                        msg,
+                        first_line,
                         self.extra_directives,
                         self.extra_roles,
                         self.extra_substitutions,
@@ -264,6 +265,14 @@ class reStructuredTextChecker:
                         continue
                     assert 0 < code < 100, code
                     code += 100 * rst_error.level
+                    # Report the full message collapsed onto a single line,
+                    # otherwise the detail (e.g. 'unknown option: "nowrap".'
+                    # for 'Error in "math" directive:') would be lost:
+                    msg = " ".join(
+                        line.strip()
+                        for line in rst_error.message.splitlines()
+                        if line.strip()
+                    )
                     msg = "%s%03i %s" % (rst_prefix, code, msg)
 
                     # We don't know the column number, leaving as zero.
